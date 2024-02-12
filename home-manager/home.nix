@@ -39,6 +39,14 @@ in
       pkgs.nextcloud-client
       pkgs.whatsapp-for-linux
       pkgs.git
+      pkgs.spotify
+      pkgs.google-chrome
+      pkgs.onlyoffice-bin_7_5
+      pkgs.obs-studio
+      pkgs.gimp
+      pkgs.krita
+      pkgs.inkscape
+      pkgs.mission-center
     # # Adds the 'hello' command to your environment. It prints a friendly
     # # "Hello, world!" when run.
     # pkgs.hello
@@ -70,6 +78,8 @@ in
   # plain files is through 'home.file'.
   home.file = {
     ".ssh/config".source = ../ssh/config;
+    ".config/onlyoffice/DesktopEditors.conf".source = ../onlyoffice/DesktopEditors.conf;
+    ".local/share/onlyoffice/desktopeditors/data/settings.xml".source = ../onlyoffice/settings.xml;
     # # Building this configuration will create a copy of 'dotfiles/screenrc' in
     # # the Nix store. Activating the configuration will then make '~/.screenrc' a
     # # symlink to the Nix store copy.
