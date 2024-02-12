@@ -47,6 +47,7 @@ in
       pkgs.krita
       pkgs.inkscape
       pkgs.mission-center
+      pkgs.zotero
     # # Adds the 'hello' command to your environment. It prints a friendly
     # # "Hello, world!" when run.
     # pkgs.hello
