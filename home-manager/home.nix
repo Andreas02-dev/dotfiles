@@ -1,5 +1,7 @@
 { config, pkgs, ... }:
-let extensions = with pkgs.gnomeExtensions; [
+let
+unstable = import <nixos-unstable> {};
+extensions = with pkgs.gnomeExtensions; [
   dash-to-dock
   caffeine
   appindicator
@@ -25,29 +27,30 @@ in
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
-  home.packages = [
-      pkgs.firefox
-      pkgs.fastfetch
-      pkgs.discord
-      pkgs.ubuntu_font_family
-      pkgs.fira-code-nerdfont
-      pkgs.fira-mono
-      pkgs.gnome.gnome-terminal
-      pkgs.direnv
-      pkgs.nix-index
-      pkgs.gnome.zenity
-      pkgs.nextcloud-client
-      pkgs.whatsapp-for-linux
-      pkgs.git
-      pkgs.spotify
-      pkgs.google-chrome
-      pkgs.onlyoffice-bin_7_5
-      pkgs.obs-studio
-      pkgs.gimp
-      pkgs.krita
-      pkgs.inkscape
-      pkgs.mission-center
-      pkgs.zotero
+  home.packages = with pkgs; [
+      firefox
+      fastfetch
+      discord
+      ubuntu_font_family
+      fira-code-nerdfont
+      fira-mono
+      gnome.gnome-terminal
+      direnv
+      nix-index
+      gnome.zenity
+      nextcloud-client
+      whatsapp-for-linux
+      git
+      spotify
+      google-chrome
+      onlyoffice-bin_7_5
+      obs-studio
+      gimp
+      krita
+      inkscape
+      mission-center
+      zotero
+      dell-command-configure
     # # Adds the 'hello' command to your environment. It prints a friendly
     # # "Hello, world!" when run.
     # pkgs.hello
@@ -69,6 +72,15 @@ in
     '')
     (pkgs.writeShellScriptBin "server" ''
     ssh -i ~/.ssh/andreas_ubuntu_ws andreas@localhost.onthewifi.com
+    '')
+    (pkgs.writeShellScriptBin "battnormal" ''
+    sudo cctk --PrimaryBattChargeCfg=Standard
+    '')
+    (pkgs.writeShellScriptBin "battexpress" ''
+    sudo cctk --PrimaryBattChargeCfg=Express
+    '')
+    (pkgs.writeShellScriptBin "battcustom" ''
+    sudo cctk --PrimaryBattChargeCfg=Custom:50-80
     '')
   ] ++ extensions;
   
