@@ -51,6 +51,7 @@ in
       mission-center
       zotero
       dell-command-configure
+      screen
     # # Adds the 'hello' command to your environment. It prints a friendly
     # # "Hello, world!" when run.
     # pkgs.hello
