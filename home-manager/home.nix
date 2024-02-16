@@ -387,6 +387,9 @@ in
                 ]))
               ])) ];
     };
+    "org/gnome/shell/extensions/blur-my-shell/appfolder" = {
+      style-dialogs = 3;
+    };
   };
   #
   gtk = {
