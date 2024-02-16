@@ -5,7 +5,9 @@ extensions = with pkgs.gnomeExtensions; [
   dash-to-dock
   caffeine
   appindicator
-];
+] ++ ( with unstable.pkgs.gnomeExtensions; [
+  resource-monitor
+] );
 in
 {
   # Home Manager needs a bit of information about you and the paths it should
@@ -274,9 +276,32 @@ in
     };
     "org/gnome/shell/extensions/dash-to-dock" = {
       disable-overview-on-startup = true;
-    };
-    "org/gnome/shell/extensions/dash-to-dock" = {
       click-action = "minimize-or-previews";
+      dash-max-icon-size = 52;
+    };
+    "com/github/Ory0n/Resource_Monitor" = {
+      diskstatsstatus = false;
+      diskspacestatus = false;
+      netethstatus = false;
+      netwlanstatus = false;
+      cpustatus = true;
+      ramstatus = true;
+      thermalcputemperaturestatus = true;
+      thermalcputemperaturedeviceslist = [
+        "coretemp: Core 20-false-/sys/class/hwmon/hwmon3/temp10_input"
+        "coretemp: Core 21-false-/sys/class/hwmon/hwmon3/temp11_input"
+        "coretemp: Core 22-false-/sys/class/hwmon/hwmon3/temp12_input"
+        "coretemp: Core 23-false-/sys/class/hwmon/hwmon3/temp13_input"
+        "coretemp: Package id 0-true-/sys/class/hwmon/hwmon3/temp1_input"
+        "coretemp: Core 0-false-/sys/class/hwmon/hwmon3/temp2_input"
+        "coretemp: Core 4-false-/sys/class/hwmon/hwmon3/temp3_input"
+        "coretemp: Core 8-false-/sys/class/hwmon/hwmon3/temp4_input"
+        "coretemp: Core 12-false-/sys/class/hwmon/hwmon3/temp5_input"
+        "coretemp: Core 16-false-/sys/class/hwmon/hwmon3/temp6_input"
+        "coretemp: Core 17-false-/sys/class/hwmon/hwmon3/temp7_input"
+        "coretemp: Core 18-false-/sys/class/hwmon/hwmon3/temp8_input"
+        "coretemp: Core 19-false-/sys/class/hwmon/hwmon3/temp9_input"
+      ];
     };
   };
   #
