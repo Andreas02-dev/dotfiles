@@ -1,10 +1,12 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 let
 unstable = import <nixos-unstable> {};
 extensions = with pkgs.gnomeExtensions; [
   dash-to-dock
   caffeine
   appindicator
+  just-perfection
+  blur-my-shell
 ] ++ ( with unstable.pkgs.gnomeExtensions; [
   resource-monitor
 ] );
@@ -140,6 +142,7 @@ in
       vscjava.vscode-maven
       ms-python.python
       rust-lang.rust-analyzer
+      jnoortheen.nix-ide
     ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
       {
         name = "dotnet-test-explorer";
@@ -210,7 +213,7 @@ in
     settings = pkgs.lib.importTOML ./starship.toml;
   };
   
-  dconf.settings = {
+  dconf.settings = let inherit (lib.hm.gvariant) mkTuple mkUint32 mkVariant mkDictionaryEntry mkDouble; in {
     # Enable installed extensions
     "org/gnome/shell".enabled-extensions = map (extension: extension.extensionUuid) extensions;
 
@@ -302,6 +305,87 @@ in
         "coretemp: Core 18-false-/sys/class/hwmon/hwmon3/temp8_input"
         "coretemp: Core 19-false-/sys/class/hwmon/hwmon3/temp9_input"
       ];
+    };
+    "org/gnome/shell/extensions/just-perfection" = {
+      accessibility-menu = false;
+      startup-status = 0; # Desktop
+    };
+  # Utrecht and Beijing clocks for Gnome Shell
+  "org/gnome/shell/world-clocks" = {
+    locations = [
+      (mkVariant (mkTuple [
+        (mkUint32 2)
+        (mkVariant (mkTuple [
+          "Utrecht"
+          "EHAM"
+          true
+          [(mkTuple [ (mkDouble "0.91280719879303418") (mkDouble "0.083194033496160544") ])]
+          [(mkTuple [ (mkDouble "0.90914200736384632") (mkDouble "0.089360857702109678") ])]
+        ]))
+      ]))
+      (mkVariant (mkTuple [
+        (mkUint32 2)
+        (mkVariant (mkTuple [
+          "Beijing"
+          "ZBAA"
+          true
+          [(mkTuple [ (mkDouble "0.69696814214530467") (mkDouble "2.0295270260429752") ])]
+          [(mkTuple [ (mkDouble "0.69689057971334611") (mkDouble "2.0313596217575696") ])]
+        ]))
+      ]))              
+    ];
+  };
+  # Utrecht and Beijing clocks for clocks app
+  "org/gnome/clocks" = {
+    world-clocks = [
+      [(mkDictionaryEntry["location" (mkVariant (mkTuple [
+        (mkUint32 2)
+        (mkVariant (mkTuple [
+          "Utrecht"
+          "EHAM"
+          true
+          [(mkTuple [ (mkDouble "0.91280719879303418") (mkDouble "0.083194033496160544") ])]
+          [(mkTuple [ (mkDouble "0.90914200736384632") (mkDouble "0.089360857702109678") ])]
+        ]))
+        ]))])]
+      [(mkDictionaryEntry["location" (mkVariant (mkTuple [
+        (mkUint32 2)
+        (mkVariant (mkTuple [
+          "Beijing"
+          "ZBAA"
+          true
+          [(mkTuple [ (mkDouble "0.69696814214530467") (mkDouble "2.0295270260429752") ])]
+          [(mkTuple [ (mkDouble "0.69689057971334611") (mkDouble "2.0313596217575696") ])]
+        ]))
+        ]))])]
+    ];
+  };
+  # Utrecht weather for GNOME Shell
+  "org/gnome/shell/weather"  = {
+    automatic-location = true;
+    locations = [ (mkVariant (mkTuple [
+              (mkUint32 2)
+              (mkVariant (mkTuple [
+                "Utrecht"
+                "EHAM"
+                true
+                [ (mkTuple [ (0.91280719879303418) (0.083194033496160544) ]) ]
+                [ (mkTuple [ (0.90914200736384632) (0.089360857702109678) ]) ]
+              ]))
+            ])) ];
+    };
+  # Utrecht weather for weather app
+  "org/gnome/Weather"  = {
+      locations = [ (mkVariant (mkTuple [
+                (mkUint32 2)
+                (mkVariant (mkTuple [
+                  "Utrecht"
+                  "EHAM"
+                  true
+                  [ (mkTuple [ (0.91280719879303418) (0.083194033496160544) ]) ]
+                  [ (mkTuple [ (0.90914200736384632) (0.089360857702109678) ]) ]
+                ]))
+              ])) ];
     };
   };
   #
