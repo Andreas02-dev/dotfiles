@@ -388,6 +388,7 @@ in
               ])) ];
     };
     "org/gnome/shell/extensions/blur-my-shell/appfolder" = {
+      # Dark, slightly transparent
       style-dialogs = 3;
     };
   };
