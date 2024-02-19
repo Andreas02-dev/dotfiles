@@ -87,7 +87,9 @@ in
     (pkgs.writeShellScriptBin "battcustom" ''
     sudo cctk --PrimaryBattChargeCfg=Custom:50-80
     '')
-  ] ++ extensions;
+  ] ++ (with unstable.pkgs; [
+    protonvpn-gui
+  ]) ++ extensions;
   
   # required to autoload fonts from packages installed via Home Manager
   fonts.fontconfig.enable = true; 
