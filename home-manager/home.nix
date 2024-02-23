@@ -56,6 +56,8 @@ in
       zotero
       dell-command-configure
       screen
+      handbrake
+      subtitleedit
     # # Adds the 'hello' command to your environment. It prints a friendly
     # # "Hello, world!" when run.
     # pkgs.hello
@@ -87,8 +89,15 @@ in
     (pkgs.writeShellScriptBin "battcustom" ''
     sudo cctk --PrimaryBattChargeCfg=Custom:50-80
     '')
+    (pkgs.writeShellScriptBin "balanced" ''
+    sudo cctk --ThermalManagement=Optimized
+    '')
+    (pkgs.writeShellScriptBin "performance" ''
+    sudo cctk --ThermalManagement=UltraPerformance
+    '')
   ] ++ (with unstable.pkgs; [
     protonvpn-gui
+    ffmpeg
   ]) ++ extensions;
   
   # required to autoload fonts from packages installed via Home Manager
@@ -392,6 +401,9 @@ in
     "org/gnome/shell/extensions/blur-my-shell/appfolder" = {
       # Dark, slightly transparent
       style-dialogs = 3;
+    };
+    "org/gnome/nautilus/preferences" = {
+      show-delete-permanently = true;
     };
   };
   #
