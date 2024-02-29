@@ -107,7 +107,6 @@ in
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
   home.file = {
-    # ".ssh/config".source = ../ssh/config;
     ".ssh/config" = {
       source = ../ssh/config;
       target = ".ssh/config_source";
