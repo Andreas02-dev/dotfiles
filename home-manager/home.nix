@@ -1,6 +1,6 @@
 { config, pkgs, lib, ... }:
 let
-unstable = import <nixos-unstable> {};
+unstable = import <nixos-unstable> { config.allowUnfree = true; };
 extensions = with pkgs.gnomeExtensions; [
   dash-to-dock
   caffeine
@@ -58,6 +58,7 @@ in
       screen
       handbrake
       subtitleedit
+      unstable.vscode-fhs
     # # Adds the 'hello' command to your environment. It prints a friendly
     # # "Hello, world!" when run.
     # pkgs.hello
@@ -136,77 +137,6 @@ in
     # NextCloud client HiDPI support. Doesn't work for autostart.
     QT_AUTO_SCREEN_SCALE_FACTOR = 1;
     # EDITOR = "emacs";
-  };
-  
-  programs.vscode = {
-    enable = true;
-    extensions = with pkgs.vscode-extensions;
-    [
-      usernamehw.errorlens
-      tamasfe.even-better-toml
-      ms-dotnettools.csharp
-      vadimcn.vscode-lldb
-      serayuzgur.crates
-      dart-code.dart-code
-      dart-code.flutter
-      skellock.just
-      vscjava.vscode-maven
-      ms-python.python
-      rust-lang.rust-analyzer
-      jnoortheen.nix-ide
-    ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
-      {
-        name = "dotnet-test-explorer";
-        publisher = "formulahendry";
-        version = "0.7.8";
-        sha256 = "qI+mPFotFBnaTUwWOcWfa4zUzyAvSjehIwLCuoK+sQE=";
-      }
-      {
-        name = "arb-editor";
-        publisher = "Google";
-        version = "0.0.12";
-        sha256 = "1egXFSDBe2njR4gI3mr+2Hu5TddP2VHkxjdgwCwXXU4=";
-      }
-      {
-        name = "csharpier-vscode";
-        publisher = "csharpier";
-        version = "1.5.2";
-        sha256 = "A2AGcUF1SQuSPECghArBxx/gi5JiIk7o6wzfgCPcfgI=";
-      }
-    ];
-    userSettings = {
-      "workbench.colorTheme" = "Default High Contrast";
-      "window.zoomLevel" = 1;
-  "redhat.telemetry.enabled" = false;
-  "editor.fontFamily" = "Firacode Nerd Font Mono";
-  "terminal.integrated.fontFamily" = "Firacode Nerd Font Mono";
-  "[rust]" = {
-    "editor.formatOnSave" = true;
-    "editor.formatOnType" = true;
-    "editor.defaultFormatter" = "rust-lang.rust-analyzer";
-  };
-  "[dart]" = {
-    "editor.formatOnSave" = true;
-    "editor.formatOnType" = true;
-    "editor.selectionHighlight" = false;
-    "editor.suggest.snippetsPreventQuickSuggestions" = false;
-    "editor.suggestSelection" = "first";
-    "editor.tabCompletion" = "onlySnippets";
-    "editor.wordBasedSuggestions" = "off";
-  };
-  "terminal.integrated.defaultProfile.linux" = "fish";
-  "docker.composeCommand" = "docker compose";
-  "docker.dockerPath" = "/usr/bin/docker";
-  "diffEditor.codeLens" = true;
-  "dev.containers.dockerComposePath" = "docker compose";
-  "tailwindCSS.includeLanguages" = {
-    "razor" = "html";
-  };
-  "diffEditor.ignoreTrimWhitespace" = false;
-  "errorLens.excludeBySource" = [
-    "dart(missing_identifier)"
-  ];
-    };
   };
 
   # Let Home Manager install and manage itself.
