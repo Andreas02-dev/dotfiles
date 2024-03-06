@@ -339,12 +339,14 @@ in
     "org/gnome/nautilus/preferences" = {
       show-delete-permanently = true;
     };
+    "org/gnome/shell/window-switcher" = {
+      current-workspace-only = false;
+    };
     "org/gnome/desktop/wm/keybindings" = {
       switch-applications = ["<Super>Tab"];
       switch-windows = ["<Alt>Tab"];
       switch-applications-backward = ["<Shift><Super>Tab"];
       switch-windows-backward = ["<Shift><Alt>Tab"];
-      current-workspace-only = false;
     };
   };
   #
