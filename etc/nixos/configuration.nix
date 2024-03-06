@@ -48,7 +48,17 @@ nixpkgs.overlays = [
     consoleLogLevel = 0;
     initrd.verbose = false;
     plymouth.enable = true;
-    kernelParams = [ "quiet" "splash" "rd.systemd.show_status=false" "rd.udev.log_level=3" "udev.log_priority=3" "boot.shell_on_fail" ];
+    kernelParams = [
+      "quiet"
+      "splash"
+      "rd.systemd.show_status=false"
+      "rd.udev.log_level=3"
+      "udev.log_priority=3"
+      "boot.shell_on_fail"
+      # Needed on kernel 6.1 to solve screen glitches, but could increase power draw
+      # TODO: Remove after upgrading to kernel 6.7
+      "i915.enable_psr=0"
+    ];
     # Boot Loader
     loader =
     {
