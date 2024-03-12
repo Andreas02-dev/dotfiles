@@ -59,6 +59,10 @@ in
       handbrake
       subtitleedit
       unstable.vscode-fhs
+      signal-desktop
+      quickemu
+      quickgui
+      qbittorrent
     # # Adds the 'hello' command to your environment. It prints a friendly
     # # "Hello, world!" when run.
     # pkgs.hello
