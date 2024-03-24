@@ -1,13 +1,12 @@
-{ config, pkgs, lib, ... }:
+{ config, nixpkgs, lib, ... }:
 let
-unstable = import <nixos-unstable> { config.allowUnfree = true; };
-extensions = with pkgs.gnomeExtensions; [
+extensions = with nixpkgs.from.stable.gnomeExtensions; [
   dash-to-dock
   caffeine
   appindicator
   just-perfection
   blur-my-shell
-] ++ ( with unstable.pkgs.gnomeExtensions; [
+] ++ ( with nixpkgs.from.unstable.gnomeExtensions; [
   resource-monitor
 ] );
 in
@@ -31,7 +30,7 @@ in
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
-  home.packages = with pkgs; [
+  home.packages = with nixpkgs.from.stable; [
       firefox
       fastfetch
       discord
@@ -58,7 +57,6 @@ in
       screen
       handbrake
       subtitleedit
-      unstable.vscode-fhs
       signal-desktop
       quickemu
       quickgui
@@ -76,33 +74,34 @@ in
     # # You can also create simple shell scripts directly inside your
     # # configuration. For example, this adds a command 'my-hello' to your
     # # environment:
-    (pkgs.writeShellScriptBin "nos" ''
+    (nixpkgs.from.stable.writeShellScriptBin "nos" ''
     sudo nixos-rebuild switch
     '')
-    (pkgs.writeShellScriptBin "hms" ''
+    (nixpkgs.from.stable.writeShellScriptBin "hms" ''
     home-manager switch
     '')
-    (pkgs.writeShellScriptBin "server" ''
+    (nixpkgs.from.stable.writeShellScriptBin "server" ''
     ssh -i ~/.ssh/andreas_ubuntu_ws andreas@localhost.onthewifi.com
     '')
-    (pkgs.writeShellScriptBin "battnormal" ''
+    (nixpkgs.from.stable.writeShellScriptBin "battnormal" ''
     sudo cctk --PrimaryBattChargeCfg=Standard
     '')
-    (pkgs.writeShellScriptBin "battexpress" ''
+    (nixpkgs.from.stable.writeShellScriptBin "battexpress" ''
     sudo cctk --PrimaryBattChargeCfg=Express
     '')
-    (pkgs.writeShellScriptBin "battcustom" ''
+    (nixpkgs.from.stable.writeShellScriptBin "battcustom" ''
     sudo cctk --PrimaryBattChargeCfg=Custom:50-80
     '')
-    (pkgs.writeShellScriptBin "balanced" ''
+    (nixpkgs.from.stable.writeShellScriptBin "balanced" ''
     sudo cctk --ThermalManagement=Optimized
     '')
-    (pkgs.writeShellScriptBin "performance" ''
+    (nixpkgs.from.stable.writeShellScriptBin "performance" ''
     sudo cctk --ThermalManagement=UltraPerformance
     '')
-  ] ++ (with unstable.pkgs; [
+  ] ++ (with nixpkgs.from.unstable; [
     protonvpn-gui
     ffmpeg
+    vscode-fhs
   ]) ++ extensions;
   
   # required to autoload fonts from packages installed via Home Manager
@@ -112,12 +111,33 @@ in
   # plain files is through 'home.file'.
   home.file = {
     ".ssh/config" = {
-      source = ../ssh/config;
+      # source = ../ssh/config;
+      text = ''
+#private account
+Host private
+        HostName github.com
+        User git
+        IdentityFile ~/.ssh/id_rsa_private
+
+#school account
+Host school
+        HostName github.com
+        User git
+        IdentityFile ~/.ssh/id_rsa_school
+      '';
       target = ".ssh/config_source";
       onChange = "cat ~/.ssh/config_source > ~/.ssh/config && chmod 400 ~/.ssh/config";
     };
-    ".config/onlyoffice/DesktopEditors.conf".source = ../onlyoffice/DesktopEditors.conf;
-    ".local/share/onlyoffice/desktopeditors/data/settings.xml".source = ../onlyoffice/settings.xml;
+    ".config/onlyoffice/DesktopEditors.conf".text = ''
+[General]
+UITheme=theme-dark
+editorWindowMode=false
+titlebar=custom
+
+    '';
+    ".local/share/onlyoffice/desktopeditors/data/settings.xml".text = ''
+<Settings><force-scale>2.5</force-scale><system-scale>0</system-scale></Settings>
+    '';
     # # Building this configuration will create a copy of 'dotfiles/screenrc' in
     # # the Nix store. Activating the configuration will then make '~/.screenrc' a
     # # symlink to the Nix store copy.
@@ -159,7 +179,7 @@ in
   
   programs.starship = {
     enable = true;
-    settings = pkgs.lib.importTOML ./starship.toml;
+    settings = lib.importTOML ./starship.toml;
   };
   
   dconf.settings = let inherit (lib.hm.gvariant) mkTuple mkUint32 mkVariant mkDictionaryEntry mkDouble; in {
@@ -359,17 +379,17 @@ in
 
     iconTheme = {
       name = "Yaru-blue-dark";
-      package = pkgs.yaru-theme;
+      package = nixpkgs.from.stable.yaru-theme;
     };
 
     theme = {
       name = "Yaru-blue-dark";
-      package = pkgs.yaru-theme;
+      package = nixpkgs.from.stable.yaru-theme;
     };
 
     cursorTheme = {
       name = "Yaru";
-      package = pkgs.yaru-theme;
+      package = nixpkgs.from.stable.yaru-theme;
     };
   };
 
