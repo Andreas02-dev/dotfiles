@@ -1,21 +1,24 @@
-{ config, nixpkgs, lib, ... }:
+{ config, pkgs, upkgs, system, lib, inputs, ... }:
+
 let
-extensions = with nixpkgs.from.stable.gnomeExtensions; [
+
+extensions = with pkgs.gnomeExtensions; [
   dash-to-dock
   caffeine
   appindicator
   just-perfection
   blur-my-shell
-] ++ ( with nixpkgs.from.unstable.gnomeExtensions; [
+] ++ ( with upkgs.gnomeExtensions; [
   resource-monitor
 ] );
 in
 {
+
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = "andreas";
   home.homeDirectory = "/home/andreas";
-  
+
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
@@ -30,7 +33,7 @@ in
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
-  home.packages = with nixpkgs.from.stable; [
+  home.packages = with pkgs; [
       firefox
       fastfetch
       discord
@@ -39,7 +42,6 @@ in
       fira-mono
       gnome.gnome-terminal
       direnv
-      nix-index
       gnome.zenity
       nextcloud-client
       whatsapp-for-linux
@@ -74,31 +76,31 @@ in
     # # You can also create simple shell scripts directly inside your
     # # configuration. For example, this adds a command 'my-hello' to your
     # # environment:
-    (nixpkgs.from.stable.writeShellScriptBin "nos" ''
+    (pkgs.writeShellScriptBin "nos" ''
     sudo nixos-rebuild switch
     '')
-    (nixpkgs.from.stable.writeShellScriptBin "hms" ''
+    (pkgs.writeShellScriptBin "hms" ''
     home-manager switch
     '')
-    (nixpkgs.from.stable.writeShellScriptBin "server" ''
+    (pkgs.writeShellScriptBin "server" ''
     ssh -i ~/.ssh/andreas_ubuntu_ws andreas@localhost.onthewifi.com
     '')
-    (nixpkgs.from.stable.writeShellScriptBin "battnormal" ''
+    (pkgs.writeShellScriptBin "battnormal" ''
     sudo cctk --PrimaryBattChargeCfg=Standard
     '')
-    (nixpkgs.from.stable.writeShellScriptBin "battexpress" ''
+    (pkgs.writeShellScriptBin "battexpress" ''
     sudo cctk --PrimaryBattChargeCfg=Express
     '')
-    (nixpkgs.from.stable.writeShellScriptBin "battcustom" ''
+    (pkgs.writeShellScriptBin "battcustom" ''
     sudo cctk --PrimaryBattChargeCfg=Custom:50-80
     '')
-    (nixpkgs.from.stable.writeShellScriptBin "balanced" ''
+    (pkgs.writeShellScriptBin "balanced" ''
     sudo cctk --ThermalManagement=Optimized
     '')
-    (nixpkgs.from.stable.writeShellScriptBin "performance" ''
+    (pkgs.writeShellScriptBin "performance" ''
     sudo cctk --ThermalManagement=UltraPerformance
     '')
-  ] ++ (with nixpkgs.from.unstable; [
+  ] ++ (with upkgs; [
     protonvpn-gui
     ffmpeg
     vscode-fhs
@@ -173,7 +175,7 @@ titlebar=custom
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
-      set fish_greeting # Disable greeting
+set fish_greeting # Disable greeting
     '';
   };
   
@@ -379,17 +381,17 @@ titlebar=custom
 
     iconTheme = {
       name = "Yaru-blue-dark";
-      package = nixpkgs.from.stable.yaru-theme;
+      package = pkgs.yaru-theme;
     };
 
     theme = {
       name = "Yaru-blue-dark";
-      package = nixpkgs.from.stable.yaru-theme;
+      package = pkgs.yaru-theme;
     };
 
     cursorTheme = {
       name = "Yaru";
-      package = nixpkgs.from.stable.yaru-theme;
+      package = pkgs.yaru-theme;
     };
   };
 

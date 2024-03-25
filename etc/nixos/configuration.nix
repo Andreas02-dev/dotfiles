@@ -10,6 +10,7 @@
       ./hardware-configuration.nix
       ./ipu6.nix
       ./fprintd.nix
+      ./nix-channel.nix
     ];
     
 nix.settings.experimental-features = [ "nix-command" "flakes" ];
