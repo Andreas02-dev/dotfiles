@@ -362,6 +362,9 @@ set fish_greeting # Disable greeting
       # Dark, slightly transparent
       style-dialogs = 3;
     };
+    "org/gnome/shell/extensions/caffeine" = {
+      toggle-shortcut = ["<Super>c"];
+    };
     "org/gnome/nautilus/preferences" = {
       show-delete-permanently = true;
     };
