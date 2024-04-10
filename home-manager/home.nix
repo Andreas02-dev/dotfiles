@@ -104,6 +104,7 @@ in
     protonvpn-gui
     ffmpeg
     vscode-fhs
+    beeper
   ]) ++ extensions;
   
   # required to autoload fonts from packages installed via Home Manager
