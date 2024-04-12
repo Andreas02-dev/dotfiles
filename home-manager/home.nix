@@ -150,7 +150,7 @@ titlebar=custom
     ".config/easyeffects/input/mic_preset.json".source = ./easyeffects/input/mic_preset.json;
     ".config/easyeffects/output/bass_enhancing_perfect_eq.json".source = ./easyeffects/output/bass_enhancing_perfect_eq.json;
     ".config/easyeffects/autoload/input/alsa_input.pci-0000_00_1f.3-platform-sof_sdw.HiFi__hw_sofsoundwire_4__source:[In] Mic.json".source = ./easyeffects/autoload/input/input.json;
-    # Doesn't work, must enable manually when wanted
+    # Doesn't work, using `systemd.user.services.easyeffects.Service.ExecStartPost` as workaround (https://github.com/nix-community/home-manager/issues/5185)
     ".config/easyeffects/autoload/output/alsa_output.pci-0000_00_1f.3-platform-sof_sdw.HiFi__hw_sofsoundwire_2__sink:[Out] Speaker.json".source = ./easyeffects/autoload/output/output.json;
     # # Building this configuration will create a copy of 'dotfiles/screenrc' in
     # # the Nix store. Activating the configuration will then make '~/.screenrc' a
@@ -198,9 +198,13 @@ set fish_greeting # Disable greeting
 
   services.easyeffects = {
     enable = true;
-    # Doesn't work, must enable manually when wanted
+    # Doesn't work, using `systemd.user.services.easyeffects.Service.ExecStartPost` as workaround (https://github.com/nix-community/home-manager/issues/5185)
     preset = "bass_enhancing_perfect_eq";
   };
+
+  systemd.user.services.easyeffects.Service.ExecStartPost = [
+    "${config.services.easyeffects.package}/bin/easyeffects --load-preset ${config.services.easyeffects.preset}"
+  ];
   
   dconf.settings = let inherit (lib.hm.gvariant) mkTuple mkUint32 mkVariant mkDictionaryEntry mkDouble; in {
     # Enable installed extensions
