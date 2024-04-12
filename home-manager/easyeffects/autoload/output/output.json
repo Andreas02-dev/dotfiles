@@ -1,0 +1,6 @@
+{
+    "device": "alsa_output.pci-0000_00_1f.3-platform-sof_sdw.HiFi__hw_sofsoundwire_2__sink",
+    "device-description": "Alder Lake PCH-P High Definition Audio Controller Speaker",
+    "device-profile": "[Out] Speaker",
+    "preset-name": "bass_enhancing_perfect_eq"
+}

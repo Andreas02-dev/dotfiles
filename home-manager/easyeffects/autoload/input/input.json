@@ -1,0 +1,6 @@
+{
+    "device": "alsa_input.pci-0000_00_1f.3-platform-sof_sdw.HiFi__hw_sofsoundwire_4__source",
+    "device-description": "Alder Lake PCH-P High Definition Audio Controller SoundWire microphones",
+    "device-profile": "[In] Mic",
+    "preset-name": "mic_preset"
+}

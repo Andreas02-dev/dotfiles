@@ -147,6 +147,11 @@ titlebar=custom
     ".local/share/onlyoffice/desktopeditors/data/settings.xml".text = ''
 <Settings><force-scale>2.5</force-scale><system-scale>0</system-scale></Settings>
     '';
+    ".config/easyeffects/input/mic_preset.json".source = ./easyeffects/input/mic_preset.json;
+    ".config/easyeffects/output/bass_enhancing_perfect_eq.json".source = ./easyeffects/output/bass_enhancing_perfect_eq.json;
+    ".config/easyeffects/autoload/input/alsa_input.pci-0000_00_1f.3-platform-sof_sdw.HiFi__hw_sofsoundwire_4__source:[In] Mic.json".source = ./easyeffects/autoload/input/input.json;
+    # Doesn't work, must enable manually when wanted
+    ".config/easyeffects/autoload/output/alsa_output.pci-0000_00_1f.3-platform-sof_sdw.HiFi__hw_sofsoundwire_2__sink:[Out] Speaker.json".source = ./easyeffects/autoload/output/output.json;
     # # Building this configuration will create a copy of 'dotfiles/screenrc' in
     # # the Nix store. Activating the configuration will then make '~/.screenrc' a
     # # symlink to the Nix store copy.
@@ -189,6 +194,12 @@ set fish_greeting # Disable greeting
   programs.starship = {
     enable = true;
     settings = lib.importTOML ./starship.toml;
+  };
+
+  services.easyeffects = {
+    enable = true;
+    # Doesn't work, must enable manually when wanted
+    preset = "bass_enhancing_perfect_eq";
   };
   
   dconf.settings = let inherit (lib.hm.gvariant) mkTuple mkUint32 mkVariant mkDictionaryEntry mkDouble; in {
@@ -383,6 +394,10 @@ set fish_greeting # Disable greeting
       switch-windows = ["<Alt>Tab"];
       switch-applications-backward = ["<Shift><Super>Tab"];
       switch-windows-backward = ["<Shift><Alt>Tab"];
+    };
+    "com/github/wwmm/easyeffects" = {
+      process-all-outputs = true;
+      process-all-inputs = true;
     };
   };
   #
