@@ -36,7 +36,6 @@ in
   home.packages = with pkgs; [
       (firefox.override { nativeMessagingHosts = [ inputs.pipewire-screenaudio.packages.${pkgs.system}.default ]; })
       fastfetch
-      discord
       ubuntu_font_family
       fira-code-nerdfont
       fira-mono
@@ -63,6 +62,7 @@ in
       quickemu
       quickgui
       qbittorrent
+      vesktop
     # # Adds the 'hello' command to your environment. It prints a friendly
     # # "Hello, world!" when run.
     # pkgs.hello
