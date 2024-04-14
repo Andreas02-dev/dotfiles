@@ -76,12 +76,23 @@
     # Standalone home-manager configuration entrypoint
     # Available through 'home-manager --flake .#your-username@your-hostname'
     homeConfigurations = {
+      # Dell XPS 13 Plus 9320 (NixOS 23.11 Tapir)
       "andreas@xps" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
         extraSpecialArgs = {inherit inputs outputs;};
         modules = [
           ./home-manager/home-modules/upkgs.nix
           ./home-manager/homes/andreas_xps_home.nix
+        ];
+      };
+
+      # HP ProDesk 400 G2.5 SFF (Ubuntu 22.04 LTS)
+      "andreas@hp" = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
+        extraSpecialArgs = {inherit inputs outputs;};
+        modules = [
+          ./home-manager/home-modules/upkgs.nix
+          ./home-manager/homes/andreas_hp_home.nix
         ];
       };
     };

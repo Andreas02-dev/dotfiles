@@ -107,7 +107,7 @@ in
     beeper
   ]) ++ extensions;
   
-  # required to autoload fonts from packages installed via Home Manager
+  # Required to autoload fonts from packages installed via Home Manager
   fonts.fontconfig.enable = true; 
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
