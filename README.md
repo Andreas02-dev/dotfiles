@@ -5,15 +5,15 @@
 
 # Installation
 
-- Run `sudo nixos-rebuild switch` (afterwards, use `nos`)
-- Run `home-manager switch` (afterwards, use `hms`)
+- Run `home-manager switch ~/config` (afterwards, use `hms`)
+- Run `sudo nixos-rebuild switch --flake ~/config` (afterwards, use `nos`)
 
 # Upgrade
 
+- First, update the lockfile with `nix flake update --flake ~/config`
+
 ## System
-- Run `cd ./etc/nixos && nix flake update`
 - Run `nos`
 
 ## Home Manager
-- Run `cd ./home-manager && nix flake update`
 - Run `hms`
