@@ -14,6 +14,13 @@ extensions = with pkgs.gnomeExtensions; [
 in
 {
 
+  imports = [
+    ../shared/common
+    ../shared/ssh_config
+    ../shared/programs/fish
+    ../shared/programs/starship
+  ];
+
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = "andreas";
@@ -79,9 +86,6 @@ in
     (pkgs.writeShellScriptBin "nos" ''
     sudo nixos-rebuild switch --flake ~/config
     '')
-    (pkgs.writeShellScriptBin "hms" ''
-    home-manager switch --flake ~/config
-    '')
     (pkgs.writeShellScriptBin "server" ''
     ssh -i ~/.ssh/andreas_ubuntu_ws andreas@localhost.onthewifi.com
     '')
@@ -106,37 +110,12 @@ in
     vscode-fhs
     beeper
   ]) ++ extensions;
-  
-  # Required to autoload fonts from packages installed via Home Manager
-  fonts.fontconfig.enable = true; 
+
+  shared.ssh_config.enable = true;
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
   home.file = {
-    ".ssh/config" = {
-      # source = ../ssh/config;
-      text = ''
-#private account
-Host private
-        HostName github.com
-        User git
-        IdentityFile ~/.ssh/id_rsa_private
-
-#school account
-Host school
-        HostName github.com
-        User git
-        IdentityFile ~/.ssh/id_rsa_school
-
-#igne account
-Host igne
-        HostName bitbucket.org
-        User git
-        IdentityFile ~/.ssh/id_rsa_school
-      '';
-      target = ".ssh/config_source";
-      onChange = "cat ~/.ssh/config_source > ~/.ssh/config && chmod 400 ~/.ssh/config";
-    };
     ".config/onlyoffice/DesktopEditors.conf".text = ''
 [General]
 UITheme=theme-dark
@@ -181,23 +160,11 @@ titlebar=custom
     # EDITOR = "emacs";
   };
 
-  # Let Home Manager install and manage itself.
-  programs.home-manager.enable = true;
-
-  # Nicely reload system units when changing configs
-  systemd.user.startServices = "sd-switch";
-  
-  programs.fish = {
+  shared.programs.fish = {
     enable = true;
-    interactiveShellInit = ''
-set fish_greeting # Disable greeting
-    '';
+    isNixOS = true;
   };
-  
-  programs.starship = {
-    enable = true;
-    settings = lib.importTOML ../starship.toml;
-  };
+  shared.programs.starship.enable = true;
 
   services.easyeffects = {
     enable = true;
