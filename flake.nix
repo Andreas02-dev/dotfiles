@@ -95,6 +95,16 @@
           ./home-manager/homes/andreas_hp_home.nix
         ];
       };
+
+      # Steam Deck OLED 1TB (SteamOS 3.5)
+      "deck@steamdeck" = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
+        extraSpecialArgs = {inherit inputs outputs;};
+        modules = [
+          ./home-manager/home-modules/upkgs.nix
+          ./home-manager/homes/deck_steamdeck_home.nix
+        ];
+      };
     };
   };
 }
