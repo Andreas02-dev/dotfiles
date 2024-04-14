@@ -77,10 +77,10 @@ in
     # # configuration. For example, this adds a command 'my-hello' to your
     # # environment:
     (pkgs.writeShellScriptBin "nos" ''
-    sudo nixos-rebuild switch
+    sudo nixos-rebuild switch --flake ~/config
     '')
     (pkgs.writeShellScriptBin "hms" ''
-    home-manager switch
+    home-manager switch --flake ~/config
     '')
     (pkgs.writeShellScriptBin "server" ''
     ssh -i ~/.ssh/andreas_ubuntu_ws andreas@localhost.onthewifi.com
@@ -147,11 +147,11 @@ titlebar=custom
     ".local/share/onlyoffice/desktopeditors/data/settings.xml".text = ''
 <Settings><force-scale>2.5</force-scale><system-scale>0</system-scale></Settings>
     '';
-    ".config/easyeffects/input/mic_preset.json".source = ./easyeffects/input/mic_preset.json;
-    ".config/easyeffects/output/bass_enhancing_perfect_eq.json".source = ./easyeffects/output/bass_enhancing_perfect_eq.json;
-    ".config/easyeffects/autoload/input/alsa_input.pci-0000_00_1f.3-platform-sof_sdw.HiFi__hw_sofsoundwire_4__source:[In] Mic.json".source = ./easyeffects/autoload/input/input.json;
+    ".config/easyeffects/input/mic_preset.json".source = ../easyeffects/input/mic_preset.json;
+    ".config/easyeffects/output/bass_enhancing_perfect_eq.json".source = ../easyeffects/output/bass_enhancing_perfect_eq.json;
+    ".config/easyeffects/autoload/input/alsa_input.pci-0000_00_1f.3-platform-sof_sdw.HiFi__hw_sofsoundwire_4__source:[In] Mic.json".source = ../easyeffects/autoload/input/input.json;
     # Doesn't work, using `systemd.user.services.easyeffects.Service.ExecStartPost` as workaround (https://github.com/nix-community/home-manager/issues/5185)
-    ".config/easyeffects/autoload/output/alsa_output.pci-0000_00_1f.3-platform-sof_sdw.HiFi__hw_sofsoundwire_2__sink:[Out] Speaker.json".source = ./easyeffects/autoload/output/output.json;
+    ".config/easyeffects/autoload/output/alsa_output.pci-0000_00_1f.3-platform-sof_sdw.HiFi__hw_sofsoundwire_2__sink:[Out] Speaker.json".source = ../easyeffects/autoload/output/output.json;
     # # Building this configuration will create a copy of 'dotfiles/screenrc' in
     # # the Nix store. Activating the configuration will then make '~/.screenrc' a
     # # symlink to the Nix store copy.
@@ -183,6 +183,9 @@ titlebar=custom
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
+
+  # Nicely reload system units when changing configs
+  systemd.user.startServices = "sd-switch";
   
   programs.fish = {
     enable = true;
@@ -193,7 +196,7 @@ set fish_greeting # Disable greeting
   
   programs.starship = {
     enable = true;
-    settings = lib.importTOML ./starship.toml;
+    settings = lib.importTOML ../starship.toml;
   };
 
   services.easyeffects = {
@@ -227,8 +230,8 @@ set fish_greeting # Disable greeting
       text-scaling-factor = 1.1000000000000001;
     };
     "org/gnome/desktop/background" = {
-      picture-uri = "file://${./bg-l.svg}";
-      picture-uri-dark = "file://${./bg-d.svg}";
+      picture-uri = "file://${../bg-l.svg}";
+      picture-uri-dark = "file://${../bg-d.svg}";
       primary-color = "#241f31";
     };
     "org/gnome/desktop/peripherals/touchpad" = {
