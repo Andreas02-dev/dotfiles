@@ -105,10 +105,10 @@ in
     sudo cctk --ThermalManagement=UltraPerformance
     '')
   ] ++ (with upkgs; [
-    protonvpn-gui
     ffmpeg
     vscode-fhs
     beeper
+    xwaylandvideobridge
   ]) ++ extensions;
 
   shared.ssh_config.enable = true;
