@@ -108,7 +108,6 @@ in
     ffmpeg
     vscode-fhs
     beeper
-    xwaylandvideobridge
   ]) ++ extensions;
 
   shared.ssh_config.enable = true;
