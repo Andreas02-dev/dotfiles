@@ -14,7 +14,7 @@
 
 # Upgrade
 
-- First, update the lockfile with `nix flake update --flake ~/config`
+- First, update the lockfile with `nix flake update ~/config`
 
 ## System
 - Run `nos`
