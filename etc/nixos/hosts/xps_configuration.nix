@@ -31,13 +31,6 @@ nixpkgs.overlays = [
 ];
 
   hardware.opengl.enable = true;
-  
-  # Keep last 5 generations
-  nix.gc = {
-    automatic = true;
-    dates = "daily";
-    options = "--delete-older-than +5";
-  };
 
   # Custom 'timeout' to ensure Plymouth boot screen is shown, disable for now
   # services.xserver.displayManager.job.preStart = "sleep 2";

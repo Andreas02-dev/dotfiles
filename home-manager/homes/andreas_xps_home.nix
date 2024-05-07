@@ -83,8 +83,11 @@ in
     # # You can also create simple shell scripts directly inside your
     # # configuration. For example, this adds a command 'my-hello' to your
     # # environment:
+    (pkgs.writeShellScriptBin "hms" ''
+      nh home switch -a
+    '')
     (pkgs.writeShellScriptBin "nos" ''
-    sudo nixos-rebuild switch --flake ~/config
+      nh os switch -a
     '')
     (pkgs.writeShellScriptBin "server" ''
     ssh -i ~/.ssh/andreas_ubuntu_ws andreas@localhost.onthewifi.com
@@ -156,6 +159,7 @@ titlebar=custom
   home.sessionVariables = {
     # NextCloud client HiDPI support. Doesn't work for autostart.
     QT_AUTO_SCREEN_SCALE_FACTOR = 1;
+    FLAKE = "/home/andreas/config";
     # EDITOR = "emacs";
   };
 

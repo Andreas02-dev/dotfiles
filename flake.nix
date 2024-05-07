@@ -67,6 +67,8 @@
       xps = nixpkgs.lib.nixosSystem {
         specialArgs = {inherit inputs outputs;};
         modules = [
+          ./etc/nixos/nixos-modules/upkgs.nix
+          ./etc/nixos/nixos-modules/nh.nix
           ./etc/nixos/nixos-modules/flake-programs-sqlite.nix
           ./etc/nixos/hosts/xps_configuration.nix
         ];

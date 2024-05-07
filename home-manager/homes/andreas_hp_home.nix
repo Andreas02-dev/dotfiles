@@ -34,6 +34,9 @@
     # # Adds the 'hello' command to your environment. It prints a friendly
     # # "Hello, world!" when run.
     # pkgs.hello
+    (pkgs.writeShellScriptBin "hms" ''
+      home-manager switch --flake ~/config
+    '')
     (pkgs.writeShellScriptBin "server" ''
     ssh -i ~/.ssh/andreas_ubuntu_ws andreas@localhost.onthewifi.com
     '')

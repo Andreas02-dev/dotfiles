@@ -4,12 +4,6 @@ with lib;
 
 {
   config = {
-
-    home.packages = with pkgs; [
-      (pkgs.writeShellScriptBin "hms" ''
-      home-manager switch --flake ~/config
-      '')
-    ];
     
     # Required to autoload fonts from packages installed via Home Manager
     fonts.fontconfig.enable = true;
