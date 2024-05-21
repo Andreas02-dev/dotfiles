@@ -47,7 +47,6 @@ in
       fira-code-nerdfont
       fira-mono
       gnome.gnome-terminal
-      direnv
       gnome.zenity
       nextcloud-client
       whatsapp-for-linux
@@ -168,6 +167,11 @@ titlebar=custom
     isNixOS = true;
   };
   shared.programs.starship.enable = true;
+
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+  };
 
   services.easyeffects = {
     enable = true;
