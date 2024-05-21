@@ -5,6 +5,7 @@
     ../shared/common
     ../shared/genericlinux
     ../shared/ssh_config
+    ../shared/programs/direnv
     ../shared/programs/fish
     ../shared/programs/starship
   ];
@@ -40,7 +41,6 @@
     (pkgs.writeShellScriptBin "server" ''
     ssh -i ~/.ssh/andreas_ubuntu_ws andreas@localhost.onthewifi.com
     '')
-    direnv
     subtitleedit
     vesktop
     zotero
@@ -91,6 +91,7 @@
     # EDITOR = "emacs";
   };
 
+  shared.programs.direnv.enable = true;
   shared.programs.fish = {
     enable = true;
     isNixOS = false;

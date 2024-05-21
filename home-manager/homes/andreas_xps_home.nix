@@ -17,6 +17,7 @@ in
   imports = [
     ../shared/common
     ../shared/ssh_config
+    ../shared/programs/direnv
     ../shared/programs/fish
     ../shared/programs/starship
   ];
@@ -162,16 +163,12 @@ titlebar=custom
     # EDITOR = "emacs";
   };
 
+  shared.programs.direnv.enable = true;
   shared.programs.fish = {
     enable = true;
     isNixOS = true;
   };
   shared.programs.starship.enable = true;
-
-  programs.direnv = {
-    enable = true;
-    nix-direnv.enable = true;
-  };
 
   services.easyeffects = {
     enable = true;

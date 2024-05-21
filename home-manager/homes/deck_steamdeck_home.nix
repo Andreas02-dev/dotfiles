@@ -5,6 +5,7 @@
     ../shared/common
     ../shared/genericlinux
     ../shared/ssh_config
+    ../shared/programs/direnv
     ../shared/programs/fish
     ../shared/programs/starship
   ];
@@ -44,7 +45,6 @@
     (pkgs.writeShellScriptBin "nixgl" ''
     nix run --impure github:nix-community/nixGL -- $1
     '')
-    direnv
     vesktop
     vscode
     zotero
@@ -95,6 +95,7 @@
     # EDITOR = "emacs";
   };
 
+  shared.programs.direnv.enable = true;
   shared.programs.fish = {
     enable = true;
     isNixOS = false;
