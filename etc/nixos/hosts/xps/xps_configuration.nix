@@ -7,10 +7,10 @@
 {
   imports =
     [ # Include the results of the hardware scan.
-      ../hardware-configuration.nix
-      ../ipu6.nix
-      ../fprintd.nix
-      ../nix-channel.nix
+      ./hardware-configuration.nix
+      ../../ipu6.nix
+      ../../fprintd.nix
+      ../../nix-channel.nix
     ];
     
 nix.settings.experimental-features = [ "nix-command" "flakes" ];

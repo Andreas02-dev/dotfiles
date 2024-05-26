@@ -24,6 +24,13 @@
     pipewire-screenaudio.url = "github:IceDBorn/pipewire-screenaudio";
 
     ## -----------------------
+
+    ## NixOS WSL
+    ## -----------------------
+    nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
+    nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
+    
+    ## -----------------------
   };
 
   outputs = {
@@ -70,7 +77,17 @@
           ./etc/nixos/nixos-modules/upkgs.nix
           ./etc/nixos/nixos-modules/nh.nix
           ./etc/nixos/nixos-modules/flake-programs-sqlite.nix
-          ./etc/nixos/hosts/xps_configuration.nix
+          ./etc/nixos/hosts/xps/xps_configuration.nix
+        ];
+      };
+      ldhnieuwegein = nixpkgs.lib.nixosSystem {
+        specialArgs = {inherit inputs outputs;};
+        modules = [
+          inputs.nixos-wsl.nixosModules.wsl
+          ./etc/nixos/nixos-modules/upkgs.nix
+          ./etc/nixos/nixos-modules/nh.nix
+          ./etc/nixos/nixos-modules/flake-programs-sqlite.nix
+          ./etc/nixos/hosts/ldhnieuwegein/ldhnieuwegein_configuration.nix
         ];
       };
     };
@@ -105,6 +122,16 @@
         modules = [
           ./home-manager/home-modules/upkgs.nix
           ./home-manager/homes/deck_steamdeck_home.nix
+        ];
+      };
+
+      # HP Z400 (Win10 WSL)
+      "ldh@ldhnieuwegein" = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
+        extraSpecialArgs = {inherit inputs outputs;};
+        modules = [
+          ./home-manager/home-modules/upkgs.nix
+          ./home-manager/homes/ldh_ldhnieuwegein_home.nix
         ];
       };
     };
