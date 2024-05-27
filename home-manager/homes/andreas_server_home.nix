@@ -4,6 +4,7 @@
 
   imports = [
     ../shared/common
+    ../shared/ssh_config
     ../shared/programs/direnv
     ../shared/programs/fish
     ../shared/programs/starship
@@ -57,6 +58,8 @@
   ] ++ (with upkgs; [
     ffmpeg
   ]);
+
+  shared.ssh_config.enable = true;
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
