@@ -90,6 +90,17 @@
           ./etc/nixos/hosts/ldhnieuwegein/ldhnieuwegein_configuration.nix
         ];
       };
+      server = nixpkgs.lib.nixosSystem {
+        specialArgs = {inherit inputs outputs;};
+        modules = [
+          ./etc/nixos/nixos-modules/upkgs.nix
+          ./etc/nixos/nixos-modules/nh.nix
+          ./etc/nixos/nixos-modules/flake-programs-sqlite.nix
+          ./etc/nixos/nixos-modules/nextcloud/nextcloud.nix
+          ./etc/nixos/nixos-modules/onlyoffice/onlyoffice.nix
+          ./etc/nixos/hosts/server/server_configuration.nix
+        ];
+      };
     };
 
     # Standalone home-manager configuration entrypoint
@@ -132,6 +143,16 @@
         modules = [
           ./home-manager/home-modules/upkgs.nix
           ./home-manager/homes/ldh_ldhnieuwegein_home.nix
+        ];
+      };
+
+      # Server
+      "andreas@server" = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
+        extraSpecialArgs = {inherit inputs outputs;};
+        modules = [
+          ./home-manager/home-modules/upkgs.nix
+          ./home-manager/homes/andreas_server_home.nix
         ];
       };
     };
