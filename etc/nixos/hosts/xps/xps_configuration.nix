@@ -164,6 +164,11 @@ nixpkgs.overlays = [
   programs.fish.enable = true;
   programs.dconf.enable = true;
 
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = true;
+  };
+
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
