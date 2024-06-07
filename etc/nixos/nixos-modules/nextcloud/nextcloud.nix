@@ -38,14 +38,14 @@
           url =
             "https://github.com/nextcloud-releases/groupfolders/releases/download/v17.0.0/groupfolders-v17.0.0.tar.gz";
           sha256 = "sha256-ut56wU4WVmuU7XecueP6ojB9yZH7GnTUzQg1XNoq5vQ=";
-          license = "agpl3";
+          license = "gpl3";
         };
 
         drawio = pkgs.fetchNextcloudApp rec {
           url =
             "https://github.com/jgraph/drawio-nextcloud/releases/download/v3.0.2/drawio-v3.0.2.tar.gz";
           sha256 = "sha256-GSLynpuodzjjCy272eksudRJj2WlHwq4OntCGHad4/U=";
-          license = "agpl3";
+          license = "gpl3";
         };
 
     };
