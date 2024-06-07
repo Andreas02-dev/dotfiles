@@ -54,7 +54,7 @@ in
       git
       spotify
       google-chrome
-      onlyoffice-bin_7_5
+      onlyoffice-bin_latest
       obs-studio
       gimp
       krita
@@ -248,6 +248,9 @@ titlebar=custom
       disable-overview-on-startup = true;
       click-action = "minimize-or-previews";
       dash-max-icon-size = 52;
+      running-indicator-style = "DOTS";
+      custom-background-color = true;
+      background-color = "rgb(53,53,53)";
     };
     "com/github/Ory0n/Resource_Monitor" = {
       diskstatsstatus = false;
