@@ -70,6 +70,7 @@ in
       quickgui
       qbittorrent
       vesktop
+      protonvpn-gui
     # # Adds the 'hello' command to your environment. It prints a friendly
     # # "Hello, world!" when run.
     # pkgs.hello
