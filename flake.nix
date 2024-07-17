@@ -135,7 +135,7 @@
         extraSpecialArgs = {inherit inputs outputs;};
         modules = [
           ./home-manager/home-modules/upkgs.nix
-          ./home-manager/homes/ldh_ldhnieuwegein_home.nix
+          ./home-manager/homes/ldh_ldhnieuwegein_home/ldh_ldhnieuwegein_home.nix
         ];
       };
 

@@ -65,10 +65,10 @@ in
     # # configuration. For example, this adds a command 'my-hello' to your
     # # environment:
     (pkgs.writeShellScriptBin "hms" ''
-      nh home switch -a
+      nh home switch -- --impure
     '')
     (pkgs.writeShellScriptBin "nos" ''
-      nh os switch -a
+      nh os switch
     '')
   ] ++ (with upkgs; [
     ffmpeg
@@ -87,6 +87,9 @@ in
     #   org.gradle.console=verbose
     #   org.gradle.daemon.idletimeout=3600000
     # '';
+
+    ".config/autostart/simulacrum.desktop".source = "${(pkgs.callPackage /home/ldh/Data/simulacrum/build_nix/build.nix { })}/share/applications/com.simulacrum.simulacrum.desktop";
+
   };
 
   # Home Manager can also manage your environment variables through
@@ -118,6 +121,12 @@ in
 
     "org/gnome/shell".disabled-extensions = [];
 
+    "org/gnome/shell".favorite-apps = [
+      "firefox.desktop"
+      "com.simulacrum.simulacrum.desktop"
+      "org.gnome.Nautilus.desktop"
+    ];
+
     "system/locale" = {
       region = "nl_NL.UTF-8";
     };
@@ -131,8 +140,8 @@ in
       font-antialiasing = "rgba";
     };
     "org/gnome/desktop/background" = {
-      picture-uri = "file://${../bg-l.svg}";
-      picture-uri-dark = "file://${../bg-d.svg}";
+      picture-uri = "file://${./assets/background}";
+      picture-uri-dark = "file://${./assets/background}";
       primary-color = "#241f31";
     };
     "org/gnome/mutter" = {
@@ -186,6 +195,11 @@ in
       switch-windows = ["<Alt>Tab"];
       switch-applications-backward = ["<Shift><Super>Tab"];
       switch-windows-backward = ["<Shift><Alt>Tab"];
+    };
+    "org/gnome/shell/extensions/smart-auto-move" = {
+      freeze-saves = true;
+      sync-mode = "RESTORE";
+      saved-windows = "{\"Simulacrum\":[{\"id\":4243934907,\"hash\":4243934907,\"sequence\":25,\"title\":\"Simulacrum\",\"workspace\":0,\"maximized\":3,\"fullscreen\":false,\"above\":false,\"monitor\":0,\"x\":0,\"y\":32,\"width\":1920,\"height\":1048,\"occupied\":true}],\"simulacrum_presenter\":[{\"id\":4243934908,\"hash\":4243934908,\"sequence\":26,\"title\":\"simulacrum_presenter\",\"workspace\":0,\"maximized\":3,\"fullscreen\":true,\"above\":false,\"monitor\":1,\"x\":1920,\"y\":0,\"width\":1920,\"height\":1080,\"occupied\":true}]}";
     };
   };
   #
