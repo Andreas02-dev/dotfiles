@@ -1,5 +1,16 @@
 { config, pkgs, upkgs, system, lib, inputs, ... }:
 
+let
+
+extensions = with pkgs.gnomeExtensions; [
+  dash-to-dock
+  caffeine
+  appindicator
+  just-perfection
+  blur-my-shell
+  smart-auto-move
+];
+in
 {
 
   imports = [
@@ -36,6 +47,10 @@
       gnome.zenity
       git
       screen
+      firefox
+      onlyoffice-bin_latest
+      inkscape
+      (pkgs.callPackage /home/ldh/Data/simulacrum/build_nix/build.nix { })
     # # Adds the 'hello' command to your environment. It prints a friendly
     # # "Hello, world!" when run.
     # pkgs.hello
@@ -57,7 +72,7 @@
     '')
   ] ++ (with upkgs; [
     ffmpeg
-  ]);
+  ]) ++ extensions;
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
@@ -98,18 +113,37 @@
   shared.programs.starship.enable = true;
   
   dconf.settings = let inherit (lib.hm.gvariant) mkTuple mkUint32 mkVariant mkDictionaryEntry mkDouble; in {
-    
+    # Enable installed extensions
+    "org/gnome/shell".enabled-extensions = map (extension: extension.extensionUuid) extensions;
+
+    "org/gnome/shell".disabled-extensions = [];
+
     "system/locale" = {
       region = "nl_NL.UTF-8";
     };
     "org/gnome/desktop/interface" = {
       color-scheme = "prefer-dark";
+      enable-hot-corners = false;
+      clock-show-weekday = true;
       font-name = "Ubuntu 11";
       document-font-name = "Ubuntu 11";
       monospace-font-name = "Ubuntu 11";
+      font-antialiasing = "rgba";
+    };
+    "org/gnome/desktop/background" = {
+      picture-uri = "file://${../bg-l.svg}";
+      picture-uri-dark = "file://${../bg-d.svg}";
+      primary-color = "#241f31";
+    };
+    "org/gnome/mutter" = {
+      edge-tiling = true;
+      center-new-windows = true;
     };
     "org/gnome/desktop/input-sources" = {
       xkb-options = ["terminate:ctrl_alt_bksp" "compose:ralt"];
+    };
+    "org/gnome/desktop/calendar" = {
+      show-weekdate = true;
     };
     "org/gnome/desktop/wm/preferences" = {
       titlebar-font = "Ubuntu Bold 11";
@@ -121,6 +155,37 @@
     "org/gnome/TextEditor" = {
       use-system-font = false;
       custom-font = "Fira Mono 14";
+    };
+    "org/gnome/shell/extensions/dash-to-dock" = {
+      disable-overview-on-startup = true;
+      click-action = "minimize-or-previews";
+      dash-max-icon-size = 52;
+      running-indicator-style = "DOTS";
+      custom-background-color = true;
+      background-color = "rgb(53,53,53)";
+    };
+    "org/gnome/shell/extensions/just-perfection" = {
+      accessibility-menu = false;
+      startup-status = 0; # Desktop
+    };
+    "org/gnome/shell/extensions/blur-my-shell/appfolder" = {
+      # Dark, slightly transparent
+      style-dialogs = 3;
+    };
+    "org/gnome/shell/extensions/caffeine" = {
+      toggle-shortcut = ["<Super>c"];
+    };
+    "org/gnome/nautilus/preferences" = {
+      show-delete-permanently = true;
+    };
+    "org/gnome/shell/window-switcher" = {
+      current-workspace-only = false;
+    };
+    "org/gnome/desktop/wm/keybindings" = {
+      switch-applications = ["<Super>Tab"];
+      switch-windows = ["<Alt>Tab"];
+      switch-applications-backward = ["<Shift><Super>Tab"];
+      switch-windows-backward = ["<Shift><Alt>Tab"];
     };
   };
   #
