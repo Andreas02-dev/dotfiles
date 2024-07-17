@@ -14,10 +14,10 @@ in
 {
 
   imports = [
-    ../shared/common
-    ../shared/programs/direnv
-    ../shared/programs/fish
-    ../shared/programs/starship
+    ../../shared/common
+    ../../shared/programs/direnv
+    ../../shared/programs/fish
+    ../../shared/programs/starship
   ];
 
   # Home Manager needs a bit of information about you and the paths it should
