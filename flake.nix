@@ -25,12 +25,6 @@
 
     ## -----------------------
 
-    ## NixOS WSL
-    ## -----------------------
-    nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
-    nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
-    
-    ## -----------------------
   };
 
   outputs = {
@@ -83,7 +77,6 @@
       ldhnieuwegein = nixpkgs.lib.nixosSystem {
         specialArgs = {inherit inputs outputs;};
         modules = [
-          inputs.nixos-wsl.nixosModules.wsl
           ./etc/nixos/nixos-modules/upkgs.nix
           ./etc/nixos/nixos-modules/nh.nix
           ./etc/nixos/nixos-modules/flake-programs-sqlite.nix
@@ -136,13 +129,13 @@
         ];
       };
 
-      # HP Z400 (Win10 WSL)
+      # Presentation-PC: AMD Ryzen 5 3600 + NVIDIA Quadro P620 2GB
       "ldh@ldhnieuwegein" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
         extraSpecialArgs = {inherit inputs outputs;};
         modules = [
           ./home-manager/home-modules/upkgs.nix
-          ./home-manager/homes/ldh_ldhnieuwegein_home.nix
+          ./home-manager/homes/ldh_ldhnieuwegein_home/ldh_ldhnieuwegein_home.nix
         ];
       };
 

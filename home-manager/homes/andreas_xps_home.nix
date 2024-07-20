@@ -212,7 +212,6 @@ titlebar=custom
     "org/gnome/mutter" = {
       edge-tiling = true;
       center-new-windows = true;
-      
     };
     "org/gnome/desktop/input-sources" = {
       xkb-options = ["terminate:ctrl_alt_bksp" "compose:ralt"];
