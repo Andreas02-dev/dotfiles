@@ -55,7 +55,6 @@ in
       spotify
       google-chrome
       onlyoffice-bin_latest
-      obs-studio
       gimp
       krita
       inkscape
@@ -171,6 +170,15 @@ titlebar=custom
     isNixOS = true;
   };
   shared.programs.starship.enable = true;
+
+  programs.obs-studio = {
+    enable = true;
+    plugins = with pkgs.obs-studio-plugins; [
+      wlrobs
+      obs-backgroundremoval
+      obs-pipewire-audio-capture
+    ];
+  };
 
   services.easyeffects = {
     enable = true;
