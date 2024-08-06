@@ -1,5 +1,11 @@
 { config, pkgs, upkgs, system, lib, inputs, ... }:
 
+let
+
+nixGLIntel = inputs.nixGL.packages."${pkgs.system}".nixGLIntel;
+
+in
+
 {
   imports = [
     ../shared/common
@@ -8,6 +14,11 @@
     ../shared/programs/direnv
     ../shared/programs/fish
     ../shared/programs/starship
+    # todo: remove when https://github.com/nix-community/home-manager/pull/5355 gets merged:
+    (builtins.fetchurl {
+      url = "https://raw.githubusercontent.com/Smona/home-manager/nixgl-compat/modules/misc/nixgl.nix";
+      sha256 = "0g5yk54766vrmxz26l3j9qnkjifjis3z2izgpsfnczhw243dmxz9";
+    })
   ];
 
   shared.genericlinux.enable = true;
@@ -45,9 +56,12 @@
     (pkgs.writeShellScriptBin "nixgl" ''
     nix run --impure github:nix-community/nixGL -- $1
     '')
-    vesktop
-    vscode
+    (config.lib.nixGL.wrap vesktop)
+    (config.lib.nixGL.wrap vscode)
     zotero
+    dconf
+    nixGLIntel
+    (config.lib.nixGL.wrap (firefox.override { nativeMessagingHosts = [ inputs.pipewire-screenaudio.packages.${pkgs.system}.default ]; }))
 
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the
@@ -64,6 +78,8 @@
   ];
 
   shared.ssh_config.enable = true;
+
+  nixGL.prefix = "${nixGLIntel}/bin/nixGLIntel";
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
@@ -94,6 +110,11 @@
   home.sessionVariables = {
     # EDITOR = "emacs";
   };
+
+  home.pointerCursor.gtk.enable = true;
+  home.pointerCursor.package = pkgs.kdePackages.breeze;
+  home.pointerCursor.name = "breeze_cursors";
+  home.pointerCursor.size = 24
 
   shared.programs.direnv.enable = true;
   shared.programs.fish = {
