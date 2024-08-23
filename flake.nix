@@ -99,8 +99,6 @@
           ./etc/nixos/nixos-modules/upkgs.nix
           ./etc/nixos/nixos-modules/nh.nix
           ./etc/nixos/nixos-modules/flake-programs-sqlite.nix
-          ./etc/nixos/nixos-modules/nextcloud/nextcloud.nix
-          ./etc/nixos/nixos-modules/onlyoffice/onlyoffice.nix
           ./etc/nixos/hosts/server/server_configuration.nix
         ];
       };
