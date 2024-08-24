@@ -17,7 +17,7 @@ in
     # todo: remove when https://github.com/nix-community/home-manager/pull/5355 gets merged:
     (builtins.fetchurl {
       url = "https://raw.githubusercontent.com/Smona/home-manager/nixgl-compat/modules/misc/nixgl.nix";
-      sha256 = "0g5yk54766vrmxz26l3j9qnkjifjis3z2izgpsfnczhw243dmxz9";
+      sha256 = "01dkfr9wq3ib5hlyq9zq662mp0jl42fw3f6gd2qgdf8l8ia78j7i";
     })
   ];
 
@@ -61,21 +61,12 @@ in
     zotero
     dconf
     nixGLIntel
+    nixd
+    tailscale
     (config.lib.nixGL.wrap (firefox.override { nativeMessagingHosts = [ inputs.pipewire-screenaudio.packages.${pkgs.system}.default ]; }))
-
-    # # It is sometimes useful to fine-tune packages, for example, by applying
-    # # overrides. You can do that directly here, just don't forget the
-    # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
-    # # fonts?
-    # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
-
-    # # You can also create simple shell scripts directly inside your
-    # # configuration. For example, this adds a command 'my-hello' to your
-    # # environment:
-    # (pkgs.writeShellScriptBin "my-hello" ''
-    #   echo "Hello, ${config.home.username}!"
-    # '')
-  ];
+  ] ++ (with upkgs; [
+    
+  ]);
 
   shared.ssh_config.enable = true;
 
@@ -114,7 +105,7 @@ in
   home.pointerCursor.gtk.enable = true;
   home.pointerCursor.package = pkgs.kdePackages.breeze;
   home.pointerCursor.name = "breeze_cursors";
-  home.pointerCursor.size = 24
+  home.pointerCursor.size = 24;
 
   shared.programs.direnv.enable = true;
   shared.programs.fish = {
