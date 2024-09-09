@@ -14,6 +14,18 @@
 
     ## -----------------------
 
+    ## NixOS WSL
+    ## -----------------------
+    nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
+    nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
+
+    ## -----------------------
+
+    nix-ld-rs = {
+      url = "github:nix-community/nix-ld-rs";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     ## Home-manager
     ## -----------------------
   
@@ -102,6 +114,17 @@
           ./etc/nixos/hosts/server/server_configuration.nix
         ];
       };
+      # Work WSL Dell
+      nixos = nixpkgs.lib.nixosSystem {
+        specialArgs = {inherit inputs outputs;};
+        modules = [
+          inputs.nixos-wsl.nixosModules.wsl
+          ./etc/nixos/nixos-modules/upkgs.nix
+          ./etc/nixos/nixos-modules/nh.nix
+          ./etc/nixos/nixos-modules/flake-programs-sqlite.nix
+          ./etc/nixos/hosts/nixos/nixos_configuration.nix
+        ];
+      };
     };
 
     # Standalone home-manager configuration entrypoint
@@ -154,6 +177,15 @@
         modules = [
           ./home-manager/home-modules/upkgs.nix
           ./home-manager/homes/andreas_server_home.nix
+        ];
+      };
+      # Dell Latitude 5550 (Win11 WSL)
+      "nixos@nixos" = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
+        extraSpecialArgs = {inherit inputs outputs;};
+        modules = [
+          ./home-manager/home-modules/upkgs.nix
+          ./home-manager/homes/nixos_nixos_home.nix
         ];
       };
     };
