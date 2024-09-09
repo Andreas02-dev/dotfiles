@@ -11,8 +11,8 @@
 
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
-  home.username = "ldh";
-  home.homeDirectory = "/home/ldh";
+  home.username = "nixos";
+  home.homeDirectory = "/home/nixos";
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -86,7 +86,7 @@
   #  /etc/profiles/per-user/andreas/etc/profile.d/hm-session-vars.sh
   #
   home.sessionVariables = {
-    FLAKE = "/home/ldh/config";
+    FLAKE = "/home/nixos/config";
     # EDITOR = "emacs";
   };
 
