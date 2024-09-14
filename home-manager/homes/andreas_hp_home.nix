@@ -97,4 +97,17 @@
     isNixOS = false;
   };
   shared.programs.starship.enable = true;
+
+  programs.firefox = {
+    enable = true;
+    nativeMessagingHosts = [
+      inputs.pipewire-screenaudio.packages.${pkgs.system}.default
+    ];
+  };
+
+  dconf.settings = let inherit (lib.hm.gvariant) mkTuple mkUint32 mkVariant mkDictionaryEntry mkDouble; in {
+    "org/gnome/desktop/wm/preferences" = {
+      button-layout = ":minimize,maximize,close";
+    };
+  };
 }
