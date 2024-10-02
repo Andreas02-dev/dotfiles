@@ -29,6 +29,11 @@
       fsType = "ext4";
     };
 
+  fileSystems."/var/lib/jellyfin_content" =
+    { device = "/dev/disk/by-uuid/cb0521bb-c61b-44a6-abe0-e6262c9fc4d2";
+      fsType = "ext4";
+    };
+
   swapDevices =
     [ { device = "/dev/disk/by-uuid/f73223bb-9867-47d9-87e0-1250d4be34a2"; }
     ];

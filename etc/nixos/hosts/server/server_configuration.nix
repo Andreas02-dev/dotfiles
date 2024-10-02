@@ -80,6 +80,11 @@
   # Enable CUPS to print documents.
   # services.printing.enable = true;
 
+  services.jellyfin = {
+    enable = true;
+    openFirewall = true;
+  };
+
   # Enable sound.
   sound.enable = true;
   hardware.pulseaudio.enable = false;
@@ -117,6 +122,73 @@
   };
   programs.fish.enable = true;
   programs.dconf.enable = true;
+
+  systemd.services."nextcloud-backup-script" = {
+      path = [
+        pkgs.docker-compose
+        pkgs.docker
+        pkgs.rsync
+      ];
+      script = ''
+#!/usr/bin/env bash
+
+# Inspired by: https://devpress.csdn.net/linux/62f631487e6682346618aca7.html
+
+#set -x
+
+docker_compose_path=/home/andreas/NextCloud/DockerCompose
+server_path=/opt/nextcloud_data
+base_backup_path=/var/lib/backups/nextcloud
+sync_path=$base_backup_path/latest_sync
+backup_path=$base_backup_path/`date +"%Y%m%d"`
+
+echo "Stopping all containers..."
+cd $docker_compose_path
+docker compose stop
+
+echo "Syncing data..."
+cd $server_path
+mkdir -p $sync_path
+rsync -cdlptgo --delete . $sync_path
+find . -maxdepth 1 -type d -not -name "." -exec rsync -crlptgo --delete {} $sync_path \;
+
+echo "Starting all containers..."
+cd $docker_compose_path
+docker compose start
+
+echo "Backing up data..."
+mkdir -p $backup_path/data
+cd $sync_path
+rsync -cdlptgo --delete . $backup_path/data
+find . -maxdepth 1 -type d -not -name "." -exec rsync -crlptgo --delete {} $backup_path/data \;
+
+cat << EOF | tee $backup_path/restore_backup.sh
+#!/bin/sh
+cd $backup_path/data
+sudo -i rsync -cdlptgo --delete . $server_path
+sudo -i find . -maxdepth 1 -type d -not -name "." -exec sudo rsync -crlptgo --delete {} $server_path \;
+EOF
+
+chmod +x $backup_path/restore_backup.sh
+
+echo "Backup finished!"
+'';
+  serviceConfig = {
+    Type = "oneshot";
+    User = "root";
+  };
+};
+
+systemd.timers."nextcloud-backup-script" = {
+  timerConfig = {
+    OnCalendar = "*-*-* 4:00:00";
+    Persistent = true;
+    AccuracySec = "1m";
+    WakeSystem = true;
+    Unit = "nextcloud-backup-script.service";
+  };
+  wantedBy = [ "timers.target" ];
+};
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
