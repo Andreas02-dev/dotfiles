@@ -45,7 +45,7 @@
   users.users.nixos = {
     isNormalUser = true;
     description = "WSL NixOS";
-    extraGroups = [ "wheel" ];
+    extraGroups = [ "wheel" "docker" ];
     packages = with pkgs; [
     #  thunderbird
     ];
@@ -58,6 +58,8 @@
     enable = true;
     package = inputs.nix-ld-rs.packages."${pkgs.system}".nix-ld-rs;
   };
+
+  virtualisation.docker.enable = true;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
