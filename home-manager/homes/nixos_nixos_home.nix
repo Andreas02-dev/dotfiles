@@ -56,6 +56,9 @@
     (pkgs.writeShellScriptBin "nos" ''
       nh os switch -a
     '')
+    (pkgs.writeShellScriptBin "rzi" ''
+      find . -type f -name '*:Zone.Identifier' -exec rm -f {} +
+    '')
   ] ++ (with upkgs; [
     ffmpeg
   ]);
