@@ -1,8 +1,6 @@
 { config, pkgs, upkgs, system, lib, inputs, ... }:
 
-let
-
-nixGLIntel = inputs.nixGL.packages."${pkgs.system}".nixGLIntel;
+let nixgl = inputs.nixgl;
 
 in
 
@@ -14,14 +12,14 @@ in
     ../shared/programs/direnv
     ../shared/programs/fish
     ../shared/programs/starship
-    # todo: remove when https://github.com/nix-community/home-manager/pull/5355 gets merged:
-    (builtins.fetchurl {
-      url = "https://raw.githubusercontent.com/Smona/home-manager/nixgl-compat/modules/misc/nixgl.nix";
-      sha256 = "01dkfr9wq3ib5hlyq9zq662mp0jl42fw3f6gd2qgdf8l8ia78j7i";
-    })
   ];
 
   shared.genericlinux.enable = true;
+
+  nixGL = {
+    packages = nixgl.packages;
+    defaultWrapper = "mesa";
+  };
 
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
@@ -60,7 +58,6 @@ in
     (config.lib.nixGL.wrap vscode)
     zotero
     dconf
-    nixGLIntel
     nixd
     tailscale
     (config.lib.nixGL.wrap (firefox.override { nativeMessagingHosts = [ inputs.pipewire-screenaudio.packages.${pkgs.system}.default ]; }))
@@ -69,8 +66,6 @@ in
   ]);
 
   shared.ssh_config.enable = true;
-
-  nixGL.prefix = "${nixGLIntel}/bin/nixGLIntel";
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.

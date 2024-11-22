@@ -29,8 +29,10 @@
     ## Home-manager
     ## -----------------------
   
+    # @TODO Change to `"github:nix-community/home-manager/release-24.11";` after the release
+
     home-manager = {
-      url = "github:nix-community/home-manager/release-24.05";
+      url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     pipewire-screenaudio.url = "github:IceDBorn/pipewire-screenaudio";
@@ -40,10 +42,7 @@
     ## NixGL
     ## -----------------------
 
-    nixGL = {
-      url = "github:nix-community/nixGL/310f8e49a149e4c9ea52f1adf70cdc768ec53f8a";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    nixgl.url = "github:nix-community/nixGL";
 
     ## -----------------------
 
@@ -52,7 +51,9 @@
   outputs = {
     self,
     nixpkgs,
+    nixpkgs-unstable,
     home-manager,
+    nixgl,
     ...
   } @ inputs: let
     inherit (self) outputs;
@@ -152,7 +153,8 @@
 
       # Steam Deck OLED 1TB (SteamOS 3.5)
       "deck@steamdeck" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
+        # @TODO Change back to `pkgs = nixpkgs.legacyPackages.x86_64-linux;` after the 24.11 release
+        pkgs = nixpkgs-unstable.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
         extraSpecialArgs = {inherit inputs outputs;};
         modules = [
           ./home-manager/home-modules/upkgs.nix
