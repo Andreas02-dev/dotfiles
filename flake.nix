@@ -2,7 +2,7 @@
   description = "Nix configuration of Andreas";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     
     ## NixOS
@@ -28,11 +28,9 @@
 
     ## Home-manager
     ## -----------------------
-  
-    # @TODO Change to `"github:nix-community/home-manager/release-24.11";` after the release
 
     home-manager = {
-      url = "github:nix-community/home-manager/master";
+      url = "github:nix-community/home-manager/release-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     pipewire-screenaudio.url = "github:IceDBorn/pipewire-screenaudio";

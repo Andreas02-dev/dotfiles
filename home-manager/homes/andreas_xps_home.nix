@@ -111,7 +111,6 @@ in
   ] ++ (with upkgs; [
     ffmpeg
     vscode-fhs
-    beeper
   ]) ++ extensions;
 
   shared.ssh_config.enable = true;
