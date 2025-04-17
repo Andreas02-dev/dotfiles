@@ -1,6 +1,4 @@
-{ pkgs, ... }:
-
-let
+{pkgs, ...}: let
   ivsc-firmware = with pkgs;
     stdenv.mkDerivation rec {
       pname = "ivsc-firmware";
@@ -11,7 +9,6 @@ let
         repo = "ivsc-firmware";
         rev = "10c214fea5560060d387fbd2fb8a1af329cb6232";
         sha256 = "sha256-kEoA0yeGXuuB+jlMIhNm+SBljH+Ru7zt3PzGb+EPBPw=";
-
       };
 
       installPhase = ''
@@ -22,8 +19,7 @@ let
         cp firmware/ivsc_fw.bin $out/lib/firmware/vsc/soc_a1_prod/ivsc_fw_a1_prod.bin
       '';
     };
-in
-{
+in {
   # Tracking Issue: Intel MIPI/IPU6 webcam-support
   # https://github.com/NixOS/nixpkgs/issues/225743#issuecomment-1849613797
   # Infrastructure Processing Unit
@@ -31,7 +27,6 @@ in
     enable = true;
     platform = "ipu6ep";
   };
-
 
   hardware.enableRedistributableFirmware = true;
 

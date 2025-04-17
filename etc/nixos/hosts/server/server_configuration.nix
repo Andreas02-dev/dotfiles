@@ -1,21 +1,22 @@
 # Edit this configuration file to define what should be installed on
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
-
-{ config, lib, pkgs, ... }:
-
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      ../../nix-channel.nix
-    ];
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+    ../../nix-channel.nix
+  ];
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = ["nix-command" "flakes"];
 
   # Boot
-  boot =
-  {
+  boot = {
     # Plymouth
     consoleLogLevel = 0;
     initrd.verbose = false;
@@ -29,8 +30,7 @@
       "boot.shell_on_fail"
     ];
     # Boot Loader
-    loader =
-    {
+    loader = {
       timeout = 0;
       efi.canTouchEfiVariables = true;
       systemd-boot.enable = true;
@@ -40,7 +40,7 @@
   networking.hostName = "server"; # Define your hostname.
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-  networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+  networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
 
   # Set your time zone.
   time.timeZone = "Europe/Amsterdam";
@@ -111,9 +111,9 @@
   users.users.andreas = {
     isNormalUser = true;
     description = "Andreas Hoornstra";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = ["networkmanager" "wheel"];
     packages = with pkgs; [
-    #  thunderbird
+      #  thunderbird
     ];
     shell = pkgs.fish;
     openssh.authorizedKeys.keys = [
@@ -124,71 +124,71 @@
   programs.dconf.enable = true;
 
   systemd.services."nextcloud-backup-script" = {
-      path = [
-        pkgs.docker-compose
-        pkgs.docker
-        pkgs.rsync
-      ];
-      script = ''
-#!/usr/bin/env bash
+    path = [
+      pkgs.docker-compose
+      pkgs.docker
+      pkgs.rsync
+    ];
+    script = ''
+      #!/usr/bin/env bash
 
-# Inspired by: https://devpress.csdn.net/linux/62f631487e6682346618aca7.html
+      # Inspired by: https://devpress.csdn.net/linux/62f631487e6682346618aca7.html
 
-#set -x
+      #set -x
 
-docker_compose_path=/home/andreas/NextCloud/DockerCompose
-server_path=/opt/nextcloud_data
-base_backup_path=/var/lib/backups/nextcloud
-sync_path=$base_backup_path/latest_sync
-backup_path=$base_backup_path/`date +"%Y%m%d"`
+      docker_compose_path=/home/andreas/NextCloud/DockerCompose
+      server_path=/opt/nextcloud_data
+      base_backup_path=/var/lib/backups/nextcloud
+      sync_path=$base_backup_path/latest_sync
+      backup_path=$base_backup_path/`date +"%Y%m%d"`
 
-echo "Stopping all containers..."
-cd $docker_compose_path
-docker compose stop
+      echo "Stopping all containers..."
+      cd $docker_compose_path
+      docker compose stop
 
-echo "Syncing data..."
-cd $server_path
-mkdir -p $sync_path
-rsync -cdlptgo --delete . $sync_path
-find . -maxdepth 1 -type d -not -name "." -exec rsync -crlptgo --delete {} $sync_path \;
+      echo "Syncing data..."
+      cd $server_path
+      mkdir -p $sync_path
+      rsync -cdlptgo --delete . $sync_path
+      find . -maxdepth 1 -type d -not -name "." -exec rsync -crlptgo --delete {} $sync_path \;
 
-echo "Starting all containers..."
-cd $docker_compose_path
-docker compose start
+      echo "Starting all containers..."
+      cd $docker_compose_path
+      docker compose start
 
-echo "Backing up data..."
-mkdir -p $backup_path/data
-cd $sync_path
-rsync -cdlptgo --delete . $backup_path/data
-find . -maxdepth 1 -type d -not -name "." -exec rsync -crlptgo --delete {} $backup_path/data \;
+      echo "Backing up data..."
+      mkdir -p $backup_path/data
+      cd $sync_path
+      rsync -cdlptgo --delete . $backup_path/data
+      find . -maxdepth 1 -type d -not -name "." -exec rsync -crlptgo --delete {} $backup_path/data \;
 
-cat << EOF | tee $backup_path/restore_backup.sh
-#!/bin/sh
-cd $backup_path/data
-sudo -i rsync -cdlptgo --delete . $server_path
-sudo -i find . -maxdepth 1 -type d -not -name "." -exec sudo rsync -crlptgo --delete {} $server_path \;
-EOF
+      cat << EOF | tee $backup_path/restore_backup.sh
+      #!/bin/sh
+      cd $backup_path/data
+      sudo -i rsync -cdlptgo --delete . $server_path
+      sudo -i find . -maxdepth 1 -type d -not -name "." -exec sudo rsync -crlptgo --delete {} $server_path \;
+      EOF
 
-chmod +x $backup_path/restore_backup.sh
+      chmod +x $backup_path/restore_backup.sh
 
-echo "Backup finished!"
-'';
-  serviceConfig = {
-    Type = "oneshot";
-    User = "root";
+      echo "Backup finished!"
+    '';
+    serviceConfig = {
+      Type = "oneshot";
+      User = "root";
+    };
   };
-};
 
-systemd.timers."nextcloud-backup-script" = {
-  timerConfig = {
-    OnCalendar = "*-*-* 4:00:00";
-    Persistent = true;
-    AccuracySec = "1m";
-    WakeSystem = true;
-    Unit = "nextcloud-backup-script.service";
+  systemd.timers."nextcloud-backup-script" = {
+    timerConfig = {
+      OnCalendar = "*-*-* 4:00:00";
+      Persistent = true;
+      AccuracySec = "1m";
+      WakeSystem = true;
+      Unit = "nextcloud-backup-script.service";
+    };
+    wantedBy = ["timers.target"];
   };
-  wantedBy = [ "timers.target" ];
-};
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -198,7 +198,7 @@ systemd.timers."nextcloud-backup-script" = {
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-  #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     docker-compose
   ];
 
@@ -220,7 +220,7 @@ systemd.timers."nextcloud-backup-script" = {
   };
 
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ 
+  networking.firewall.allowedTCPPorts = [
     22
     25565
   ];
@@ -250,6 +250,4 @@ systemd.timers."nextcloud-backup-script" = {
   #
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
   system.stateVersion = "23.11"; # Did you read the comment?
-
 }
-

@@ -1,6 +1,12 @@
-{ config, pkgs, upkgs, system, lib, inputs, ... }:
-
 {
+  config,
+  pkgs,
+  upkgs,
+  system,
+  lib,
+  inputs,
+  ...
+}: {
   imports = [
     ../shared/common
     ../shared/genericlinux
@@ -39,7 +45,7 @@
       home-manager switch --flake ~/config
     '')
     (pkgs.writeShellScriptBin "server" ''
-    ssh -i ~/.ssh/andreas_ubuntu_ws andreas@localhost.onthewifi.com
+      ssh -i ~/.ssh/andreas_ubuntu_ws andreas@localhost.onthewifi.com
     '')
     subtitleedit
     vesktop
@@ -105,7 +111,9 @@
     ];
   };
 
-  dconf.settings = let inherit (lib.hm.gvariant) mkTuple mkUint32 mkVariant mkDictionaryEntry mkDouble; in {
+  dconf.settings = let
+    inherit (lib.hm.gvariant) mkTuple mkUint32 mkVariant mkDictionaryEntry mkDouble;
+  in {
     "org/gnome/desktop/wm/preferences" = {
       button-layout = ":minimize,maximize,close";
     };

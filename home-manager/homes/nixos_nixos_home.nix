@@ -1,7 +1,12 @@
-{ config, pkgs, upkgs, system, lib, inputs, ... }:
-
 {
-
+  config,
+  pkgs,
+  upkgs,
+  system,
+  lib,
+  inputs,
+  ...
+}: {
   imports = [
     ../shared/common
     ../shared/programs/direnv
@@ -28,7 +33,8 @@
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
-  home.packages = with pkgs; [
+  home.packages = with pkgs;
+    [
       fastfetch
       ubuntu_font_family
       fira-code-nerdfont
@@ -37,31 +43,32 @@
       git
       screen
       wget
-    # # Adds the 'hello' command to your environment. It prints a friendly
-    # # "Hello, world!" when run.
-    # pkgs.hello
+      # # Adds the 'hello' command to your environment. It prints a friendly
+      # # "Hello, world!" when run.
+      # pkgs.hello
 
-    # # It is sometimes useful to fine-tune packages, for example, by applying
-    # # overrides. You can do that directly here, just don't forget the
-    # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
-    # # fonts?
-    # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
+      # # It is sometimes useful to fine-tune packages, for example, by applying
+      # # overrides. You can do that directly here, just don't forget the
+      # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
+      # # fonts?
+      # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
 
-    # # You can also create simple shell scripts directly inside your
-    # # configuration. For example, this adds a command 'my-hello' to your
-    # # environment:
-    (pkgs.writeShellScriptBin "hms" ''
-      nh home switch -a
-    '')
-    (pkgs.writeShellScriptBin "nos" ''
-      nh os switch -a
-    '')
-    (pkgs.writeShellScriptBin "rzi" ''
-      find . -type f -name '*:Zone.Identifier' -exec rm -f {} +
-    '')
-  ] ++ (with upkgs; [
-    ffmpeg
-  ]);
+      # # You can also create simple shell scripts directly inside your
+      # # configuration. For example, this adds a command 'my-hello' to your
+      # # environment:
+      (pkgs.writeShellScriptBin "hms" ''
+        nh home switch -a
+      '')
+      (pkgs.writeShellScriptBin "nos" ''
+        nh os switch -a
+      '')
+      (pkgs.writeShellScriptBin "rzi" ''
+        find . -type f -name '*:Zone.Identifier' -exec rm -f {} +
+      '')
+    ]
+    ++ (with upkgs; [
+      ffmpeg
+    ]);
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
@@ -100,9 +107,10 @@
     isNixOS = true;
   };
   shared.programs.starship.enable = true;
-  
-  dconf.settings = let inherit (lib.hm.gvariant) mkTuple mkUint32 mkVariant mkDictionaryEntry mkDouble; in {
-    
+
+  dconf.settings = let
+    inherit (lib.hm.gvariant) mkTuple mkUint32 mkVariant mkDictionaryEntry mkDouble;
+  in {
     "system/locale" = {
       region = "nl_NL.UTF-8";
     };

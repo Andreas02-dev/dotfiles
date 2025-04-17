@@ -1,13 +1,13 @@
-{ config, inputs, pkgs, lib, ... }:
-
-with lib;
-
-let
-
-cfg = config.shared.programs.direnv;
-
-in
 {
+  config,
+  inputs,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.shared.programs.direnv;
+in {
   options.shared.programs.direnv = {
     enable = mkEnableOption "direnv";
   };

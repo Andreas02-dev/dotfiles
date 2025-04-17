@@ -1,18 +1,21 @@
-{ config, pkgs, upkgs, system, lib, inputs, ... }:
-
-let
-
-extensions = with pkgs.gnomeExtensions; [
-  dash-to-dock
-  caffeine
-  appindicator
-  just-perfection
-  blur-my-shell
-  smart-auto-move
-];
-in
 {
-
+  config,
+  pkgs,
+  upkgs,
+  system,
+  lib,
+  inputs,
+  ...
+}: let
+  extensions = with pkgs.gnomeExtensions; [
+    dash-to-dock
+    caffeine
+    appindicator
+    just-perfection
+    blur-my-shell
+    smart-auto-move
+  ];
+in {
   imports = [
     ../../shared/common
     ../../shared/programs/direnv
@@ -39,7 +42,8 @@ in
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
-  home.packages = with pkgs; [
+  home.packages = with pkgs;
+    [
       fastfetch
       ubuntu_font_family
       fira-code-nerdfont
@@ -50,29 +54,31 @@ in
       firefox
       onlyoffice-bin_latest
       inkscape
-      (pkgs.callPackage /home/ldh/Data/simulacrum/build_nix/build.nix { })
-    # # Adds the 'hello' command to your environment. It prints a friendly
-    # # "Hello, world!" when run.
-    # pkgs.hello
+      (pkgs.callPackage /home/ldh/Data/simulacrum/build_nix/build.nix {})
+      # # Adds the 'hello' command to your environment. It prints a friendly
+      # # "Hello, world!" when run.
+      # pkgs.hello
 
-    # # It is sometimes useful to fine-tune packages, for example, by applying
-    # # overrides. You can do that directly here, just don't forget the
-    # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
-    # # fonts?
-    # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
+      # # It is sometimes useful to fine-tune packages, for example, by applying
+      # # overrides. You can do that directly here, just don't forget the
+      # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
+      # # fonts?
+      # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
 
-    # # You can also create simple shell scripts directly inside your
-    # # configuration. For example, this adds a command 'my-hello' to your
-    # # environment:
-    (pkgs.writeShellScriptBin "hms" ''
-      nh home switch -- --impure
-    '')
-    (pkgs.writeShellScriptBin "nos" ''
-      nh os switch
-    '')
-  ] ++ (with upkgs; [
-    ffmpeg
-  ]) ++ extensions;
+      # # You can also create simple shell scripts directly inside your
+      # # configuration. For example, this adds a command 'my-hello' to your
+      # # environment:
+      (pkgs.writeShellScriptBin "hms" ''
+        nh home switch -- --impure
+      '')
+      (pkgs.writeShellScriptBin "nos" ''
+        nh os switch
+      '')
+    ]
+    ++ (with upkgs; [
+      ffmpeg
+    ])
+    ++ extensions;
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
@@ -88,8 +94,7 @@ in
     #   org.gradle.daemon.idletimeout=3600000
     # '';
 
-    ".config/autostart/simulacrum.desktop".source = "${(pkgs.callPackage /home/ldh/Data/simulacrum/build_nix/build.nix { })}/share/applications/com.simulacrum.simulacrum.desktop";
-
+    ".config/autostart/simulacrum.desktop".source = "${(pkgs.callPackage /home/ldh/Data/simulacrum/build_nix/build.nix {})}/share/applications/com.simulacrum.simulacrum.desktop";
   };
 
   # Home Manager can also manage your environment variables through
@@ -114,8 +119,10 @@ in
     isNixOS = true;
   };
   shared.programs.starship.enable = true;
-  
-  dconf.settings = let inherit (lib.hm.gvariant) mkTuple mkUint32 mkVariant mkDictionaryEntry mkDouble; in {
+
+  dconf.settings = let
+    inherit (lib.hm.gvariant) mkTuple mkUint32 mkVariant mkDictionaryEntry mkDouble;
+  in {
     # Enable installed extensions
     "org/gnome/shell".enabled-extensions = map (extension: extension.extensionUuid) extensions;
 

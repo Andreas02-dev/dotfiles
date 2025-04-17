@@ -4,10 +4,10 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-    
+
     ## NixOS
     ## -----------------------
-  
+
     # For command-not-found
     programsdb.url = "github:wamserma/flake-programs-sqlite";
     programsdb.inputs.nixpkgs.follows = "nixpkgs";
@@ -44,6 +44,15 @@
 
     ## -----------------------
 
+    ## System-manager
+    ## -----------------------
+
+    system-manager = {
+      url = "github:numtide/system-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    ## -----------------------
   };
 
   outputs = {
@@ -52,6 +61,7 @@
     nixpkgs-unstable,
     home-manager,
     nixgl,
+    system-manager,
     ...
   } @ inputs: let
     inherit (self) outputs;
@@ -186,6 +196,15 @@
         modules = [
           ./home-manager/home-modules/upkgs.nix
           ./home-manager/homes/nixos_nixos_home.nix
+        ];
+      };
+    };
+
+    systemConfigs = {
+      # Steam Deck OLED 1TB (SteamOS 3.5)
+      steamdeck = system-manager.lib.makeSystemConfig {
+        modules = [
+          ./system-manager/systems/steamdeck
         ];
       };
     };

@@ -1,10 +1,14 @@
-{ config, pkgs, upkgs, system, lib, inputs, ... }:
-
-let nixgl = inputs.nixgl;
-
-in
-
 {
+  config,
+  pkgs,
+  upkgs,
+  system,
+  lib,
+  inputs,
+  ...
+}: let
+  nixgl = inputs.nixgl;
+in {
   imports = [
     ../shared/common
     ../shared/genericlinux
@@ -40,30 +44,34 @@ in
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
-  home.packages = with pkgs; [
-    # # Adds the 'hello' command to your environment. It prints a friendly
-    # # "Hello, world!" when run.
-    # pkgs.hello
-    (pkgs.writeShellScriptBin "hms" ''
-      home-manager switch --flake ~/config
-    '')
-    (pkgs.writeShellScriptBin "server" ''
-    ssh -i ~/.ssh/andreas_ubuntu_ws andreas@localhost.onthewifi.com
-    '')
-    # Quick and dirty way to use NixGL
-    (pkgs.writeShellScriptBin "nixgl" ''
-    nix run --impure github:nix-community/nixGL -- $1
-    '')
-    (config.lib.nixGL.wrap vesktop)
-    (config.lib.nixGL.wrap vscode)
-    zotero
-    dconf
-    nixd
-    tailscale
-    (config.lib.nixGL.wrap (firefox.override { nativeMessagingHosts = [ inputs.pipewire-screenaudio.packages.${pkgs.system}.default ]; }))
-  ] ++ (with upkgs; [
-    
-  ]);
+  home.packages = with pkgs;
+    [
+      # # Adds the 'hello' command to your environment. It prints a friendly
+      # # "Hello, world!" when run.
+      # pkgs.hello
+      (pkgs.writeShellScriptBin "hms" ''
+        home-manager switch --flake ~/config
+      '')
+      (pkgs.writeShellScriptBin "sms" ''
+        sudo -i nix run 'github:numtide/system-manager' -- switch --flake ~/config
+      '')
+      (pkgs.writeShellScriptBin "server" ''
+        ssh -i ~/.ssh/andreas_ubuntu_ws andreas@localhost.onthewifi.com
+      '')
+      # Quick and dirty way to use NixGL
+      (pkgs.writeShellScriptBin "nixgl" ''
+        nix run --impure github:nix-community/nixGL -- $1
+      '')
+      (config.lib.nixGL.wrap vesktop)
+      (config.lib.nixGL.wrap vscode)
+      zotero
+      dconf
+      nixd
+      tailscale
+      (config.lib.nixGL.wrap (firefox.override {nativeMessagingHosts = [inputs.pipewire-screenaudio.packages.${pkgs.system}.default];}))
+    ]
+    ++ (with upkgs; [
+      ]);
 
   shared.ssh_config.enable = true;
 

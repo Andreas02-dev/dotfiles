@@ -1,19 +1,24 @@
-{ config, pkgs, upkgs, system, lib, inputs, ... }:
-
-let
-
-extensions = with pkgs.gnomeExtensions; [
-  dash-to-dock
-  caffeine
-  appindicator
-  just-perfection
-  blur-my-shell
-] ++ ( with upkgs.gnomeExtensions; [
-  resource-monitor
-] );
-in
 {
-
+  config,
+  pkgs,
+  upkgs,
+  system,
+  lib,
+  inputs,
+  ...
+}: let
+  extensions = with pkgs.gnomeExtensions;
+    [
+      dash-to-dock
+      caffeine
+      appindicator
+      just-perfection
+      blur-my-shell
+    ]
+    ++ (with upkgs.gnomeExtensions; [
+      resource-monitor
+    ]);
+in {
   imports = [
     ../shared/common
     ../shared/ssh_config
@@ -41,8 +46,9 @@ in
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
-  home.packages = with pkgs; [
-      (firefox.override { nativeMessagingHosts = [ inputs.pipewire-screenaudio.packages.${pkgs.system}.default ]; })
+  home.packages = with pkgs;
+    [
+      (firefox.override {nativeMessagingHosts = [inputs.pipewire-screenaudio.packages.${pkgs.system}.default];})
       fastfetch
       ubuntu_font_family
       fira-code-nerdfont
@@ -71,47 +77,49 @@ in
       vesktop
       protonvpn-gui
       parabolic
-    # # Adds the 'hello' command to your environment. It prints a friendly
-    # # "Hello, world!" when run.
-    # pkgs.hello
+      # # Adds the 'hello' command to your environment. It prints a friendly
+      # # "Hello, world!" when run.
+      # pkgs.hello
 
-    # # It is sometimes useful to fine-tune packages, for example, by applying
-    # # overrides. You can do that directly here, just don't forget the
-    # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
-    # # fonts?
-    # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
+      # # It is sometimes useful to fine-tune packages, for example, by applying
+      # # overrides. You can do that directly here, just don't forget the
+      # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
+      # # fonts?
+      # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
 
-    # # You can also create simple shell scripts directly inside your
-    # # configuration. For example, this adds a command 'my-hello' to your
-    # # environment:
-    (pkgs.writeShellScriptBin "hms" ''
-      nh home switch -a
-    '')
-    (pkgs.writeShellScriptBin "nos" ''
-      nh os switch -a
-    '')
-    (pkgs.writeShellScriptBin "server" ''
-    ssh -i ~/.ssh/andreas_ubuntu_ws andreas@localhost.onthewifi.com
-    '')
-    (pkgs.writeShellScriptBin "battnormal" ''
-    sudo cctk --PrimaryBattChargeCfg=Standard
-    '')
-    (pkgs.writeShellScriptBin "battexpress" ''
-    sudo cctk --PrimaryBattChargeCfg=Express
-    '')
-    (pkgs.writeShellScriptBin "battcustom" ''
-    sudo cctk --PrimaryBattChargeCfg=Custom:50-80
-    '')
-    (pkgs.writeShellScriptBin "balanced" ''
-    sudo cctk --ThermalManagement=Optimized
-    '')
-    (pkgs.writeShellScriptBin "performance" ''
-    sudo cctk --ThermalManagement=UltraPerformance
-    '')
-  ] ++ (with upkgs; [
-    ffmpeg
-    vscode-fhs
-  ]) ++ extensions;
+      # # You can also create simple shell scripts directly inside your
+      # # configuration. For example, this adds a command 'my-hello' to your
+      # # environment:
+      (pkgs.writeShellScriptBin "hms" ''
+        nh home switch -a
+      '')
+      (pkgs.writeShellScriptBin "nos" ''
+        nh os switch -a
+      '')
+      (pkgs.writeShellScriptBin "server" ''
+        ssh -i ~/.ssh/andreas_ubuntu_ws andreas@localhost.onthewifi.com
+      '')
+      (pkgs.writeShellScriptBin "battnormal" ''
+        sudo cctk --PrimaryBattChargeCfg=Standard
+      '')
+      (pkgs.writeShellScriptBin "battexpress" ''
+        sudo cctk --PrimaryBattChargeCfg=Express
+      '')
+      (pkgs.writeShellScriptBin "battcustom" ''
+        sudo cctk --PrimaryBattChargeCfg=Custom:50-80
+      '')
+      (pkgs.writeShellScriptBin "balanced" ''
+        sudo cctk --ThermalManagement=Optimized
+      '')
+      (pkgs.writeShellScriptBin "performance" ''
+        sudo cctk --ThermalManagement=UltraPerformance
+      '')
+    ]
+    ++ (with upkgs; [
+      ffmpeg
+      vscode-fhs
+    ])
+    ++ extensions;
 
   shared.ssh_config.enable = true;
 
@@ -119,14 +127,14 @@ in
   # plain files is through 'home.file'.
   home.file = {
     ".config/onlyoffice/DesktopEditors.conf".text = ''
-[General]
-UITheme=theme-dark
-editorWindowMode=false
-titlebar=custom
+      [General]
+      UITheme=theme-dark
+      editorWindowMode=false
+      titlebar=custom
 
     '';
     ".local/share/onlyoffice/desktopeditors/data/settings.xml".text = ''
-<Settings><force-scale>2.5</force-scale><system-scale>0</system-scale></Settings>
+      <Settings><force-scale>2.5</force-scale><system-scale>0</system-scale></Settings>
     '';
     ".config/easyeffects/input/mic_preset.json".source = ../easyeffects/input/mic_preset.json;
     ".config/easyeffects/output/bass_enhancing_perfect_eq.json".source = ../easyeffects/output/bass_enhancing_perfect_eq.json;
@@ -188,13 +196,15 @@ titlebar=custom
   systemd.user.services.easyeffects.Service.ExecStartPost = [
     "${config.services.easyeffects.package}/bin/easyeffects --load-preset ${config.services.easyeffects.preset}"
   ];
-  
-  dconf.settings = let inherit (lib.hm.gvariant) mkTuple mkUint32 mkVariant mkDictionaryEntry mkDouble; in {
+
+  dconf.settings = let
+    inherit (lib.hm.gvariant) mkTuple mkUint32 mkVariant mkDictionaryEntry mkDouble;
+  in {
     # Enable installed extensions
     "org/gnome/shell".enabled-extensions = map (extension: extension.extensionUuid) extensions;
 
     "org/gnome/shell".disabled-extensions = [];
-    
+
     "system/locale" = {
       region = "nl_NL.UTF-8";
     };
@@ -288,82 +298,96 @@ titlebar=custom
       accessibility-menu = false;
       startup-status = 0; # Desktop
     };
-  # Utrecht and Beijing clocks for Gnome Shell
-  "org/gnome/shell/world-clocks" = {
-    locations = [
-      (mkVariant (mkTuple [
-        (mkUint32 2)
+    # Utrecht and Beijing clocks for Gnome Shell
+    "org/gnome/shell/world-clocks" = {
+      locations = [
         (mkVariant (mkTuple [
-          "Utrecht"
-          "EHAM"
-          true
-          [(mkTuple [ (mkDouble "0.91280719879303418") (mkDouble "0.083194033496160544") ])]
-          [(mkTuple [ (mkDouble "0.90914200736384632") (mkDouble "0.089360857702109678") ])]
+          (mkUint32 2)
+          (mkVariant (mkTuple [
+            "Utrecht"
+            "EHAM"
+            true
+            [(mkTuple [(mkDouble "0.91280719879303418") (mkDouble "0.083194033496160544")])]
+            [(mkTuple [(mkDouble "0.90914200736384632") (mkDouble "0.089360857702109678")])]
+          ]))
         ]))
-      ]))
-      (mkVariant (mkTuple [
-        (mkUint32 2)
         (mkVariant (mkTuple [
-          "Beijing"
-          "ZBAA"
-          true
-          [(mkTuple [ (mkDouble "0.69696814214530467") (mkDouble "2.0295270260429752") ])]
-          [(mkTuple [ (mkDouble "0.69689057971334611") (mkDouble "2.0313596217575696") ])]
+          (mkUint32 2)
+          (mkVariant (mkTuple [
+            "Beijing"
+            "ZBAA"
+            true
+            [(mkTuple [(mkDouble "0.69696814214530467") (mkDouble "2.0295270260429752")])]
+            [(mkTuple [(mkDouble "0.69689057971334611") (mkDouble "2.0313596217575696")])]
+          ]))
         ]))
-      ]))              
-    ];
-  };
-  # Utrecht and Beijing clocks for clocks app
-  "org/gnome/clocks" = {
-    world-clocks = [
-      [(mkDictionaryEntry["location" (mkVariant (mkTuple [
-        (mkUint32 2)
-        (mkVariant (mkTuple [
-          "Utrecht"
-          "EHAM"
-          true
-          [(mkTuple [ (mkDouble "0.91280719879303418") (mkDouble "0.083194033496160544") ])]
-          [(mkTuple [ (mkDouble "0.90914200736384632") (mkDouble "0.089360857702109678") ])]
-        ]))
-        ]))])]
-      [(mkDictionaryEntry["location" (mkVariant (mkTuple [
-        (mkUint32 2)
-        (mkVariant (mkTuple [
-          "Beijing"
-          "ZBAA"
-          true
-          [(mkTuple [ (mkDouble "0.69696814214530467") (mkDouble "2.0295270260429752") ])]
-          [(mkTuple [ (mkDouble "0.69689057971334611") (mkDouble "2.0313596217575696") ])]
-        ]))
-        ]))])]
-    ];
-  };
-  # Utrecht weather for GNOME Shell
-  "org/gnome/shell/weather"  = {
-    automatic-location = true;
-    locations = [ (mkVariant (mkTuple [
+      ];
+    };
+    # Utrecht and Beijing clocks for clocks app
+    "org/gnome/clocks" = {
+      world-clocks = [
+        [
+          (mkDictionaryEntry [
+            "location"
+            (mkVariant (mkTuple [
               (mkUint32 2)
               (mkVariant (mkTuple [
                 "Utrecht"
                 "EHAM"
                 true
-                [ (mkTuple [ (0.91280719879303418) (0.083194033496160544) ]) ]
-                [ (mkTuple [ (0.90914200736384632) (0.089360857702109678) ]) ]
+                [(mkTuple [(mkDouble "0.91280719879303418") (mkDouble "0.083194033496160544")])]
+                [(mkTuple [(mkDouble "0.90914200736384632") (mkDouble "0.089360857702109678")])]
               ]))
-            ])) ];
+            ]))
+          ])
+        ]
+        [
+          (mkDictionaryEntry [
+            "location"
+            (mkVariant (mkTuple [
+              (mkUint32 2)
+              (mkVariant (mkTuple [
+                "Beijing"
+                "ZBAA"
+                true
+                [(mkTuple [(mkDouble "0.69696814214530467") (mkDouble "2.0295270260429752")])]
+                [(mkTuple [(mkDouble "0.69689057971334611") (mkDouble "2.0313596217575696")])]
+              ]))
+            ]))
+          ])
+        ]
+      ];
     };
-  # Utrecht weather for weather app
-  "org/gnome/Weather"  = {
-      locations = [ (mkVariant (mkTuple [
-                (mkUint32 2)
-                (mkVariant (mkTuple [
-                  "Utrecht"
-                  "EHAM"
-                  true
-                  [ (mkTuple [ (0.91280719879303418) (0.083194033496160544) ]) ]
-                  [ (mkTuple [ (0.90914200736384632) (0.089360857702109678) ]) ]
-                ]))
-              ])) ];
+    # Utrecht weather for GNOME Shell
+    "org/gnome/shell/weather" = {
+      automatic-location = true;
+      locations = [
+        (mkVariant (mkTuple [
+          (mkUint32 2)
+          (mkVariant (mkTuple [
+            "Utrecht"
+            "EHAM"
+            true
+            [(mkTuple [0.91280719879303418 0.083194033496160544])]
+            [(mkTuple [0.90914200736384632 0.089360857702109678])]
+          ]))
+        ]))
+      ];
+    };
+    # Utrecht weather for weather app
+    "org/gnome/Weather" = {
+      locations = [
+        (mkVariant (mkTuple [
+          (mkUint32 2)
+          (mkVariant (mkTuple [
+            "Utrecht"
+            "EHAM"
+            true
+            [(mkTuple [0.91280719879303418 0.083194033496160544])]
+            [(mkTuple [0.90914200736384632 0.089360857702109678])]
+          ]))
+        ]))
+      ];
     };
     "org/gnome/shell/extensions/blur-my-shell/appfolder" = {
       # Dark, slightly transparent
