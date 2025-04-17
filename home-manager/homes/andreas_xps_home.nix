@@ -53,8 +53,8 @@ in {
       ubuntu_font_family
       fira-code-nerdfont
       fira-mono
-      gnome.gnome-terminal
-      gnome.zenity
+      gnome-terminal
+      zenity
       nextcloud-client
       whatsapp-for-linux
       git

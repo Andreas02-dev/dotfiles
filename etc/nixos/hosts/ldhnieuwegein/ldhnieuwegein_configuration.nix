@@ -14,22 +14,7 @@
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
 
-  nixpkgs.overlays = [
-    (final: prev: {
-      gnome = prev.gnome.overrideScope (gnomeFinal: gnomePrev: {
-        mutter = gnomePrev.mutter.overrideAttrs (old: {
-          # Dynamic triple buffering for GNOME 46
-          src = pkgs.fetchgit {
-            url = "https://gitlab.gnome.org/vanvugt/mutter.git";
-            rev = "663f19bc02c1b4e3d1a67b4ad72d644f9b9d6970";
-            sha256 = "sha256-I1s4yz5JEWJY65g+dgprchwZuPGP9djgYXrMMxDQGrs=";
-          };
-        });
-      });
-    })
-  ];
-
-  hardware.opengl.enable = true;
+  hardware.graphics.enable = true;
 
   # Custom 'timeout' to ensure Plymouth boot screen is shown, disable for now
   # services.xserver.displayManager.job.preStart = "sleep 2";
@@ -136,9 +121,9 @@
   ];
 
   # Configure keymap in X11
-  services.xserver = {
+  services.xserver.xkb = {
     layout = "us";
-    xkbVariant = "euro";
+    variant = "euro";
   };
 
   # Enable CUPS to print documents.

@@ -23,7 +23,7 @@
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
 
-  hardware.opengl.enable = true;
+  hardware.graphics.enable = true;
 
   networking.hostName = "nixos";
 

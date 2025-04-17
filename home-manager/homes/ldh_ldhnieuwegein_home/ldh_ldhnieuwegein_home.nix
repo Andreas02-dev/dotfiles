@@ -48,7 +48,7 @@ in {
       ubuntu_font_family
       fira-code-nerdfont
       fira-mono
-      gnome.zenity
+      zenity
       git
       screen
       firefox
