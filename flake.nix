@@ -161,8 +161,7 @@
 
       # Steam Deck OLED 1TB (SteamOS 3.5)
       "deck@steamdeck" = home-manager.lib.homeManagerConfiguration {
-        # @TODO Change back to `pkgs = nixpkgs.legacyPackages.x86_64-linux;` after the 24.11 release
-        pkgs = nixpkgs-unstable.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
+        pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
         extraSpecialArgs = {inherit inputs outputs;};
         modules = [
           ./home-manager/home-modules/upkgs.nix
