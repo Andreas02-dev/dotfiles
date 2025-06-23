@@ -103,7 +103,7 @@ in {
   #
   home.sessionVariables = {
     # EDITOR = "emacs";
-    NH_FLAKE = "/home/deck/config"
+    NH_FLAKE = "/home/deck/config";
   };
 
   home.pointerCursor.gtk.enable = true;
