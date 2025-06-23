@@ -85,8 +85,7 @@
     openFirewall = true;
   };
 
-  # Enable sound.
-  hardware.pulseaudio.enable = false;
+  # Enable sound with Pipewire
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
