@@ -16,8 +16,6 @@
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
 
-  boot.kernelPackages = pkgs.linuxPackages_6_12;
-
   # OBS virtual camera
   boot.extraModulePackages = with config.boot.kernelPackages; [
     v4l2loopback

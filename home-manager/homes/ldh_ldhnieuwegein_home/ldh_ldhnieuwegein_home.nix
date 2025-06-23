@@ -46,8 +46,8 @@ in {
     [
       fastfetch
       ubuntu_font_family
-      fira-code-nerdfont
-      fira-mono
+      nerd-fonts.fira-code
+      nerd-fonts.fira-mono
       zenity
       git
       screen
@@ -109,7 +109,7 @@ in {
   #  /etc/profiles/per-user/andreas/etc/profile.d/hm-session-vars.sh
   #
   home.sessionVariables = {
-    FLAKE = "/home/ldh/config";
+    NH_FLAKE = "/home/ldh/config";
     # EDITOR = "emacs";
   };
 
@@ -166,11 +166,11 @@ in {
     };
     "org/gnome/Console" = {
       use-system-font = false;
-      custom-font = "FiraCode Nerd Font Mono 14";
+      custom-font = "FiraMono Nerd Font Mono 14";
     };
     "org/gnome/TextEditor" = {
       use-system-font = false;
-      custom-font = "Fira Mono 14";
+      custom-font = "FiraMono Mono 14";
     };
     "org/gnome/shell/extensions/dash-to-dock" = {
       disable-overview-on-startup = true;

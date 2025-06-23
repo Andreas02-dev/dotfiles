@@ -38,8 +38,8 @@
     [
       fastfetch
       ubuntu_font_family
-      fira-code-nerdfont
-      fira-mono
+      nerd-fonts.fira-code
+      nerd-fonts.fira-mono
       git
       screen
       # # Adds the 'hello' command to your environment. It prints a friendly
@@ -95,7 +95,7 @@
   #  /etc/profiles/per-user/andreas/etc/profile.d/hm-session-vars.sh
   #
   home.sessionVariables = {
-    FLAKE = "/home/andreas/config";
+    NH_FLAKE = "/home/andreas/config";
     # EDITOR = "emacs";
   };
 

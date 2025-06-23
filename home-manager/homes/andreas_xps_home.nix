@@ -51,8 +51,8 @@ in {
       (firefox.override {nativeMessagingHosts = [inputs.pipewire-screenaudio.packages.${pkgs.system}.default];})
       fastfetch
       ubuntu_font_family
-      fira-code-nerdfont
-      fira-mono
+      nerd-fonts.fira-code
+      nerd-fonts.fira-mono
       gnome-terminal
       zenity
       nextcloud-client
@@ -70,7 +70,6 @@ in {
       screen
       handbrake
       subtitleedit
-      signal-desktop
       quickemu
       quickgui
       qbittorrent
@@ -134,7 +133,7 @@ in {
 
     '';
     ".local/share/onlyoffice/desktopeditors/data/settings.xml".text = ''
-      <Settings><force-scale>2.5</force-scale><system-scale>0</system-scale></Settings>
+      <Settings><force-scale>0</force-scale><system-scale>0</system-scale></Settings>
     '';
     ".config/easyeffects/input/mic_preset.json".source = ../easyeffects/input/mic_preset.json;
     ".config/easyeffects/output/bass_enhancing_perfect_eq.json".source = ../easyeffects/output/bass_enhancing_perfect_eq.json;
@@ -167,7 +166,7 @@ in {
   home.sessionVariables = {
     # NextCloud client HiDPI support. Doesn't work for autostart.
     QT_AUTO_SCREEN_SCALE_FACTOR = 1;
-    FLAKE = "/home/andreas/config";
+    NH_FLAKE = "/home/andreas/config";
     # EDITOR = "emacs";
   };
 
@@ -242,11 +241,11 @@ in {
     };
     "org/gnome/Console" = {
       use-system-font = false;
-      custom-font = "FiraCode Nerd Font Mono 14";
+      custom-font = "FiraMono Nerd Font Mono 14";
     };
     "org/gnome/TextEditor" = {
       use-system-font = false;
-      custom-font = "Fira Mono 14";
+      custom-font = "FiraMono Mono 14";
     };
     "org/gnome/terminal/legacy/profiles:" = {
       list = ["b1dcc9dd-5262-4d8d-a863-c897e6d979b9"];
@@ -256,7 +255,7 @@ in {
       visible-name = "Default";
       default-size-columns = 100;
       default-size-rows = 30;
-      font = "FiraCode Nerd Font Mono 14";
+      font = "FiraMono Nerd Font Mono 14";
       use-system-font = false;
       use-theme-colors = false;
       foreground-color = "rgb(255,255,255)";

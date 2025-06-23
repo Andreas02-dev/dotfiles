@@ -50,7 +50,7 @@ in {
       # # "Hello, world!" when run.
       # pkgs.hello
       (pkgs.writeShellScriptBin "hms" ''
-        home-manager switch --flake ~/config
+        nh home switch -a
       '')
       (pkgs.writeShellScriptBin "sms" ''
         sudo -i nix run 'github:numtide/system-manager' -- switch --flake ~/config
@@ -103,6 +103,7 @@ in {
   #
   home.sessionVariables = {
     # EDITOR = "emacs";
+    NH_FLAKE = "/home/deck/config"
   };
 
   home.pointerCursor.gtk.enable = true;
@@ -116,4 +117,6 @@ in {
     isNixOS = false;
   };
   shared.programs.starship.enable = true;
+
+  programs.nh.enable = true;
 }

@@ -37,8 +37,8 @@
     [
       fastfetch
       ubuntu_font_family
-      fira-code-nerdfont
-      fira-mono
+      nerd-fonts.fira-code
+      nerd-fonts.fira-mono
       zenity
       git
       screen
@@ -97,7 +97,7 @@
   #  /etc/profiles/per-user/andreas/etc/profile.d/hm-session-vars.sh
   #
   home.sessionVariables = {
-    FLAKE = "/home/nixos/config";
+    NH_FLAKE = "/home/nixos/config";
     # EDITOR = "emacs";
   };
 
@@ -128,11 +128,11 @@
     };
     "org/gnome/Console" = {
       use-system-font = false;
-      custom-font = "FiraCode Nerd Font Mono 14";
+      custom-font = "FiraMono Nerd Font Mono 14";
     };
     "org/gnome/TextEditor" = {
       use-system-font = false;
-      custom-font = "Fira Mono 14";
+      custom-font = "FiraMono Mono 14";
     };
   };
   #
