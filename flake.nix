@@ -47,6 +47,15 @@
 
     ## -----------------------
 
+    ## chromium-109
+    ## -----------------------
+
+    chromium-109 = {
+      url = "github:nixos/nixpkgs/3c3b3ab88a34ff8026fc69cb78febb9ec9aedb16";
+    };
+
+    ## -----------------------
+
   };
 
   outputs = {

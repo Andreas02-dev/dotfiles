@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "chromium-109": {
+      "locked": {
+        "lastModified": 1673641359,
+        "narHash": "sha256-vffYAYAAG5Bhj4vjShFQWve24HyXPQAZdqn9jA5KT6U=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "3c3b3ab88a34ff8026fc69cb78febb9ec9aedb16",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "3c3b3ab88a34ff8026fc69cb78febb9ec9aedb16",
+        "type": "github"
+      }
+    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -260,6 +276,7 @@
     },
     "root": {
       "inputs": {
+        "chromium-109": "chromium-109",
         "home-manager": "home-manager",
         "nix-ld-rs": "nix-ld-rs",
         "nixGL": "nixGL",

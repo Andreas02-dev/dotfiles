@@ -9,6 +9,11 @@
 
 {
 
+  nix.settings = {
+    max-jobs = 4;
+    build-cores = 2;
+  };
+
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
@@ -48,6 +53,7 @@
     extraGroups = [ "wheel" "docker" ];
     packages = with pkgs; [
     #  thunderbird
+       docker-credential-helpers
     ];
     shell = pkgs.fish;
   };
@@ -57,9 +63,13 @@
   programs.nix-ld = {
     enable = true;
     package = inputs.nix-ld-rs.packages."${pkgs.system}".nix-ld-rs;
+    libraries = with pkgs; [
+      icu
+    ];
   };
 
   virtualisation.docker.enable = true;
+  services.gnome.gnome-keyring.enable = true;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;

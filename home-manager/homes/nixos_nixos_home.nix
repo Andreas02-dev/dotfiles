@@ -1,5 +1,4 @@
 { config, pkgs, upkgs, system, lib, inputs, ... }:
-
 {
 
   imports = [
@@ -59,9 +58,19 @@
     (pkgs.writeShellScriptBin "rzi" ''
       find . -type f -name '*:Zone.Identifier' -exec rm -f {} +
     '')
+    (pkgs.writeShellScriptBin "lock" ''
+      pkill -u "$(whoami)" -f gnome-keyring-daemon
+    '')
+    (pkgs.writeShellScriptBin "unlock" ''
+      read -rsp "keyring password:" keyringPass
+      echo -n "$keyringPass" | gnome-keyring-daemon -dr --unlock
+      unset keyringPass
+    '')
   ] ++ (with upkgs; [
     ffmpeg
-  ]);
+  ]) ++ [
+    inputs.chromium-109.legacyPackages.x86_64-linux.chromium
+  ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
@@ -91,6 +100,7 @@
   #
   home.sessionVariables = {
     FLAKE = "/home/nixos/config";
+    SSH_SK_HELPER="/mnt/c/Windows/System32/OpenSSH/ssh-sk-helper.exe";
     # EDITOR = "emacs";
   };
 
