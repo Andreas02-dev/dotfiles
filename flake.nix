@@ -21,11 +21,6 @@
 
     ## -----------------------
 
-    nix-ld-rs = {
-      url = "github:nix-community/nix-ld-rs";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     ## Home-manager
     ## -----------------------
 
