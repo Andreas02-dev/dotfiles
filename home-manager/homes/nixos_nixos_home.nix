@@ -1,6 +1,12 @@
-{ config, pkgs, upkgs, system, lib, inputs, ... }:
 {
-
+  config,
+  pkgs,
+  upkgs,
+  system,
+  lib,
+  inputs,
+  ...
+}: {
   imports = [
     ../shared/common
     ../shared/programs/direnv
@@ -27,24 +33,25 @@
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
-  home.packages = with pkgs; [
+  home.packages = with pkgs;
+    [
       fastfetch
       ubuntu_font_family
-      fira-code-nerdfont
-      fira-mono
-      gnome.zenity
+      nerd-fonts.fira-code
+      nerd-fonts.fira-mono
+      zenity
       git
       screen
       wget
-    # # Adds the 'hello' command to your environment. It prints a friendly
-    # # "Hello, world!" when run.
-    # pkgs.hello
+      # # Adds the 'hello' command to your environment. It prints a friendly
+      # # "Hello, world!" when run.
+      # pkgs.hello
 
-    # # It is sometimes useful to fine-tune packages, for example, by applying
-    # # overrides. You can do that directly here, just don't forget the
-    # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
-    # # fonts?
-    # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
+      # # It is sometimes useful to fine-tune packages, for example, by applying
+      # # overrides. You can do that directly here, just don't forget the
+      # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
+      # # fonts?
+      # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
 
     # # You can also create simple shell scripts directly inside your
     # # configuration. For example, this adds a command 'my-hello' to your
@@ -99,7 +106,7 @@
   #  /etc/profiles/per-user/andreas/etc/profile.d/hm-session-vars.sh
   #
   home.sessionVariables = {
-    FLAKE = "/home/nixos/config";
+    NH_FLAKE = "/home/nixos/config";
     SSH_SK_HELPER="/mnt/c/Windows/System32/OpenSSH/ssh-sk-helper.exe";
     # EDITOR = "emacs";
   };
@@ -110,9 +117,10 @@
     isNixOS = true;
   };
   shared.programs.starship.enable = true;
-  
-  dconf.settings = let inherit (lib.hm.gvariant) mkTuple mkUint32 mkVariant mkDictionaryEntry mkDouble; in {
-    
+
+  dconf.settings = let
+    inherit (lib.hm.gvariant) mkTuple mkUint32 mkVariant mkDictionaryEntry mkDouble;
+  in {
     "system/locale" = {
       region = "nl_NL.UTF-8";
     };
@@ -130,11 +138,11 @@
     };
     "org/gnome/Console" = {
       use-system-font = false;
-      custom-font = "FiraCode Nerd Font Mono 14";
+      custom-font = "FiraMono Nerd Font Mono 14";
     };
     "org/gnome/TextEditor" = {
       use-system-font = false;
-      custom-font = "Fira Mono 14";
+      custom-font = "FiraMono Mono 14";
     };
   };
   #

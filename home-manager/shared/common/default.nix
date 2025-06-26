@@ -1,10 +1,11 @@
-{ inputs, pkgs, lib, ... }:
-
-with lib;
-
 {
+  inputs,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; {
   config = {
-    
     # Required to autoload fonts from packages installed via Home Manager
     fonts.fontconfig.enable = true;
 

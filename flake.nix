@@ -2,12 +2,12 @@
   description = "Nix configuration of Andreas";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-    
+
     ## NixOS
     ## -----------------------
-  
+
     # For command-not-found
     programsdb.url = "github:wamserma/flake-programs-sqlite";
     programsdb.inputs.nixpkgs.follows = "nixpkgs";
@@ -28,9 +28,9 @@
 
     ## Home-manager
     ## -----------------------
-  
+
     home-manager = {
-      url = "github:nix-community/home-manager/release-24.05";
+      url = "github:nix-community/home-manager/release-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     pipewire-screenaudio.url = "github:IceDBorn/pipewire-screenaudio";
@@ -40,8 +40,15 @@
     ## NixGL
     ## -----------------------
 
-    nixGL = {
-      url = "github:nix-community/nixGL/310f8e49a149e4c9ea52f1adf70cdc768ec53f8a";
+    nixgl.url = "github:nix-community/nixGL";
+
+    ## -----------------------
+
+    ## System-manager
+    ## -----------------------
+
+    system-manager = {
+      url = "github:numtide/system-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -61,7 +68,10 @@
   outputs = {
     self,
     nixpkgs,
+    nixpkgs-unstable,
     home-manager,
+    nixgl,
+    system-manager,
     ...
   } @ inputs: let
     inherit (self) outputs;
@@ -195,6 +205,15 @@
         modules = [
           ./home-manager/home-modules/upkgs.nix
           ./home-manager/homes/nixos_nixos_home.nix
+        ];
+      };
+    };
+
+    systemConfigs = {
+      # Steam Deck OLED 1TB (SteamOS 3.5)
+      steamdeck = system-manager.lib.makeSystemConfig {
+        modules = [
+          ./system-manager/systems/steamdeck
         ];
       };
     };

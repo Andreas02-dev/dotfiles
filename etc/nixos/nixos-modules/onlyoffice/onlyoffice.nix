@@ -1,10 +1,9 @@
 {
-  pkgs
-  , inputs
-  , config
-  , ...
+  pkgs,
+  inputs,
+  config,
+  ...
 }: {
-
   services.onlyoffice = {
     enable = true;
     hostname = "onlyoffice.onthewifi.com";
@@ -17,15 +16,14 @@
   };
 
   security.acme = {
-    acceptTerms = true;   
-    certs = { 
-      ${config.services.onlyoffice.hostname}.email = "andreashoornstra@gmail.com"; 
-    }; 
+    acceptTerms = true;
+    certs = {
+      ${config.services.onlyoffice.hostname}.email = "andreashoornstra@gmail.com";
+    };
   };
 
   networking.firewall.allowedTCPPorts = [
     80
     443
   ];
-
 }

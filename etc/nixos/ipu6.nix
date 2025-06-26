@@ -1,6 +1,4 @@
-{ pkgs, ... }:
-
-let
+{pkgs, ...}: let
   ivsc-firmware = with pkgs;
     stdenv.mkDerivation rec {
       pname = "ivsc-firmware";
@@ -11,7 +9,6 @@ let
         repo = "ivsc-firmware";
         rev = "10c214fea5560060d387fbd2fb8a1af329cb6232";
         sha256 = "sha256-kEoA0yeGXuuB+jlMIhNm+SBljH+Ru7zt3PzGb+EPBPw=";
-
       };
 
       installPhase = ''
@@ -22,8 +19,7 @@ let
         cp firmware/ivsc_fw.bin $out/lib/firmware/vsc/soc_a1_prod/ivsc_fw_a1_prod.bin
       '';
     };
-in
-{
+in {
   # Tracking Issue: Intel MIPI/IPU6 webcam-support
   # https://github.com/NixOS/nixpkgs/issues/225743#issuecomment-1849613797
   # Infrastructure Processing Unit
@@ -32,27 +28,24 @@ in
     platform = "ipu6ep";
   };
 
-
   hardware.enableRedistributableFirmware = true;
+
+  boot.kernelPackages = pkgs.linuxPackages_latest.extend ( self: super: {
+    ipu6-drivers = super.ipu6-drivers.overrideAttrs (
+        final: previous: rec {
+          src = builtins.fetchGit {
+            url = "https://github.com/intel/ipu6-drivers.git";
+            ref = "master";
+            rev = "b4ba63df5922150ec14ef7f202b3589896e0301a";
+          };
+          patches = [
+            "${src}/patches/0001-v6.10-IPU6-headers-used-by-PSYS.patch"
+          ] ;
+        }
+    );
+  } );
 
   hardware.firmware = [
     ivsc-firmware
   ];
-
-  # https://discourse.nixos.org/t/how-to-hide-this-dummy-video-device/40985/5
-  services.udev.extraRules = ''
-    # If the system is not a video device, we skip these rules by jumping to the end
-    SUBSYSTEM!="video4linux", GOTO="hide_cam_end"
-    #ATTR{name}=="Intel MIPI Camera", GOTO="hide_cam_end" # This line cannot be used as it would move too much stuff and then the camera would not work. Instead, we just move the dummy camera,
-    # I found its name with udevadm info -q all -a /dev/video0
-    # If this is not the dummy video, we also skip these rules.
-    ATTR{name}!="Dummy video device (0x0000)", GOTO="hide_cam_end"
-    ACTION=="add", RUN+="${pkgs.coreutils}/bin/mkdir -p /dev/not-for-user"
-    ACTION=="add", RUN+="${pkgs.coreutils}/bin/mv -f $env{DEVNAME} /dev/not-for-user/"
-
-    ACTION=="remove", RUN+="${pkgs.coreutils}/bin/rm -f /dev/not-for-user/$name"
-    ACTION=="remove", RUN+="${pkgs.coreutils}/bin/rm -f /dev/not-for-user/$env{ID_SERIAL}"
-
-    LABEL="hide_cam_end"
-  '';
 }

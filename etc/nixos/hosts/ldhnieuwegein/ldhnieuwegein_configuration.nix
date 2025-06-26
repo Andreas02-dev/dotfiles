@@ -1,41 +1,26 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-
-{ config, pkgs, ... }:
-
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      ../../nix-channel.nix
-    ];
-    
-nix.settings.experimental-features = [ "nix-command" "flakes" ];
-    
-nixpkgs.overlays = [
-  (final: prev: {
-    gnome = prev.gnome.overrideScope (gnomeFinal: gnomePrev: {
-      mutter = gnomePrev.mutter.overrideAttrs ( old: {
-        # Dynamic triple buffering for GNOME 46
-        src = pkgs.fetchgit {
-          url = "https://gitlab.gnome.org/vanvugt/mutter.git";
-          rev = "663f19bc02c1b4e3d1a67b4ad72d644f9b9d6970";
-          sha256 = "sha256-I1s4yz5JEWJY65g+dgprchwZuPGP9djgYXrMMxDQGrs=";
-        };
-      });
-    });
-  })
-];
+  config,
+  pkgs,
+  ...
+}: {
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+    ../../nix-channel.nix
+  ];
 
-  hardware.opengl.enable = true;
+  nix.settings.experimental-features = ["nix-command" "flakes"];
+
+  hardware.graphics.enable = true;
 
   # Custom 'timeout' to ensure Plymouth boot screen is shown, disable for now
   # services.xserver.displayManager.job.preStart = "sleep 2";
 
   # Boot
-  boot =
-  {
+  boot = {
     # Plymouth
     consoleLogLevel = 0;
     initrd.verbose = false;
@@ -49,8 +34,7 @@ nixpkgs.overlays = [
       "boot.shell_on_fail"
     ];
     # Boot Loader
-    loader =
-    {
+    loader = {
       timeout = 0;
       efi.canTouchEfiVariables = true;
       systemd-boot.enable = true;
@@ -62,13 +46,12 @@ nixpkgs.overlays = [
   services.xserver.videoDrivers = ["nvidia"];
 
   hardware.nvidia = {
-
     # Modesetting is required.
     modesetting.enable = true;
 
     # Nvidia power management. Experimental, and can cause sleep/suspend to fail.
     # Enable this if you have graphical corruption issues or application crashes after waking
-    # up from sleep. This fixes it by saving the entire VRAM memory to /tmp/ instead 
+    # up from sleep. This fixes it by saving the entire VRAM memory to /tmp/ instead
     # of just the bare essentials.
     powerManagement.enable = false;
 
@@ -78,15 +61,15 @@ nixpkgs.overlays = [
 
     # Use the NVidia open source kernel module (not to be confused with the
     # independent third-party "nouveau" open source driver).
-    # Support is limited to the Turing and later architectures. Full list of 
-    # supported GPUs is at: 
-    # https://github.com/NVIDIA/open-gpu-kernel-modules#compatible-gpus 
+    # Support is limited to the Turing and later architectures. Full list of
+    # supported GPUs is at:
+    # https://github.com/NVIDIA/open-gpu-kernel-modules#compatible-gpus
     # Only available from driver 515.43.04+
     # Currently "beta quality", so false is currently the recommended setting.
     open = false;
 
     # Enable the Nvidia settings menu,
-	# accessible via `nvidia-settings`.
+    # accessible via `nvidia-settings`.
     nvidiaSettings = true;
 
     # Optionally, you may need to select the appropriate driver version for your specific GPU.
@@ -123,31 +106,30 @@ nixpkgs.overlays = [
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
-  
+
   # Remove `xterm`:
-  services.xserver.excludePackages = (with pkgs; [
+  services.xserver.excludePackages = with pkgs; [
     xterm
-  ]);
+  ];
 
   # Enable the GNOME Desktop Environment.
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
   # Without the following packages:
-  environment.gnome.excludePackages = (with pkgs; [
+  environment.gnome.excludePackages = with pkgs; [
     #
-  ]);
+  ];
 
   # Configure keymap in X11
-  services.xserver = {
+  services.xserver.xkb = {
     layout = "us";
-    xkbVariant = "euro";
+    variant = "euro";
   };
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
-  # Enable sound with pipewire.
-  hardware.pulseaudio.enable = false;
+  # Enable sound with Pipewire
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -171,9 +153,9 @@ nixpkgs.overlays = [
   users.users.ldh = {
     isNormalUser = true;
     description = "ldh";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = ["networkmanager" "wheel"];
     packages = with pkgs; [
-    #  thunderbird
+      #  thunderbird
     ];
     shell = pkgs.fish;
   };
@@ -186,8 +168,8 @@ nixpkgs.overlays = [
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #  wget
+    #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    #  wget
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -216,5 +198,4 @@ nixpkgs.overlays = [
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.11"; # Did you read the comment?
-
 }

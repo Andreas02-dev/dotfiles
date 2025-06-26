@@ -1,13 +1,13 @@
-{ config, inputs, pkgs, lib, ... }:
-
-with lib;
-
-let
-
-cfg = config.shared.programs.fish;
-
-in
 {
+  config,
+  inputs,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.shared.programs.fish;
+in {
   options.shared.programs.fish = {
     enable = mkEnableOption "fish";
     isNixOS = mkOption {
@@ -20,7 +20,7 @@ in
       programs.fish = {
         enable = true;
         interactiveShellInit = ''
-    set fish_greeting # Disable greeting
+          set fish_greeting # Disable greeting
         '';
       };
     })
@@ -34,7 +34,7 @@ in
           end
         '';
         interactiveShellInit = ''
-    set fish_greeting # Disable greeting
+          set fish_greeting # Disable greeting
         '';
       };
       home.file.".config/fish/completions/nix.fish".source = "${pkgs.nix}/share/fish/vendor_completions.d/nix.fish";

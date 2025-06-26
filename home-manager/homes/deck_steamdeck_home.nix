@@ -1,12 +1,14 @@
-{ config, pkgs, upkgs, system, lib, inputs, ... }:
-
-let
-
-nixGLIntel = inputs.nixGL.packages."${pkgs.system}".nixGLIntel;
-
-in
-
 {
+  config,
+  pkgs,
+  upkgs,
+  system,
+  lib,
+  inputs,
+  ...
+}: let
+  nixgl = inputs.nixgl;
+in {
   imports = [
     ../shared/common
     ../shared/genericlinux
@@ -14,14 +16,14 @@ in
     ../shared/programs/direnv
     ../shared/programs/fish
     ../shared/programs/starship
-    # todo: remove when https://github.com/nix-community/home-manager/pull/5355 gets merged:
-    (builtins.fetchurl {
-      url = "https://raw.githubusercontent.com/Smona/home-manager/nixgl-compat/modules/misc/nixgl.nix";
-      sha256 = "01dkfr9wq3ib5hlyq9zq662mp0jl42fw3f6gd2qgdf8l8ia78j7i";
-    })
   ];
 
   shared.genericlinux.enable = true;
+
+  nixGL = {
+    packages = nixgl.packages;
+    defaultWrapper = "mesa";
+  };
 
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
@@ -42,35 +44,36 @@ in
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
-  home.packages = with pkgs; [
-    # # Adds the 'hello' command to your environment. It prints a friendly
-    # # "Hello, world!" when run.
-    # pkgs.hello
-    (pkgs.writeShellScriptBin "hms" ''
-      home-manager switch --flake ~/config
-    '')
-    (pkgs.writeShellScriptBin "server" ''
-    ssh -i ~/.ssh/andreas_ubuntu_ws andreas@localhost.onthewifi.com
-    '')
-    # Quick and dirty way to use NixGL
-    (pkgs.writeShellScriptBin "nixgl" ''
-    nix run --impure github:nix-community/nixGL -- $1
-    '')
-    (config.lib.nixGL.wrap vesktop)
-    (config.lib.nixGL.wrap vscode)
-    zotero
-    dconf
-    nixGLIntel
-    nixd
-    tailscale
-    (config.lib.nixGL.wrap (firefox.override { nativeMessagingHosts = [ inputs.pipewire-screenaudio.packages.${pkgs.system}.default ]; }))
-  ] ++ (with upkgs; [
-    
-  ]);
+  home.packages = with pkgs;
+    [
+      # # Adds the 'hello' command to your environment. It prints a friendly
+      # # "Hello, world!" when run.
+      # pkgs.hello
+      (pkgs.writeShellScriptBin "hms" ''
+        nh home switch -a
+      '')
+      (pkgs.writeShellScriptBin "sms" ''
+        sudo -i nix run 'github:numtide/system-manager' -- switch --flake ~/config
+      '')
+      (pkgs.writeShellScriptBin "server" ''
+        ssh -i ~/.ssh/andreas_ubuntu_ws andreas@localhost.onthewifi.com
+      '')
+      # Quick and dirty way to use NixGL
+      (pkgs.writeShellScriptBin "nixgl" ''
+        nix run --impure github:nix-community/nixGL -- $1
+      '')
+      (config.lib.nixGL.wrap vesktop)
+      (config.lib.nixGL.wrap vscode)
+      zotero
+      dconf
+      nixd
+      tailscale
+      (config.lib.nixGL.wrap (firefox.override {nativeMessagingHosts = [inputs.pipewire-screenaudio.packages.${pkgs.system}.default];}))
+    ]
+    ++ (with upkgs; [
+      ]);
 
   shared.ssh_config.enable = true;
-
-  nixGL.prefix = "${nixGLIntel}/bin/nixGLIntel";
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
@@ -100,6 +103,7 @@ in
   #
   home.sessionVariables = {
     # EDITOR = "emacs";
+    NH_FLAKE = "/home/deck/config";
   };
 
   home.pointerCursor.gtk.enable = true;
@@ -113,4 +117,6 @@ in
     isNixOS = false;
   };
   shared.programs.starship.enable = true;
+
+  programs.nh.enable = true;
 }

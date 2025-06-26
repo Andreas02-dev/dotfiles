@@ -1,13 +1,13 @@
-{ config, inputs, pkgs, lib, ... }:
-
-with lib;
-
-let
-
-cfg = config.shared.programs.starship;
-
-in
 {
+  config,
+  inputs,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.shared.programs.starship;
+in {
   options.shared.programs.starship = {
     enable = mkEnableOption "starship";
   };

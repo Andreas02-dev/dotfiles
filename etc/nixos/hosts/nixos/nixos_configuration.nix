@@ -1,33 +1,34 @@
 # Edit this configuration file to define what should be installed on
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
-
 # NixOS-WSL specific options are documented on the NixOS-WSL repository:
 # https://github.com/nix-community/NixOS-WSL
-
-{ config, lib, pkgs, inputs, ... }:
-
 {
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}: {
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+    ../../nix-channel.nix
+  ];
 
   nix.settings = {
     max-jobs = 4;
     build-cores = 2;
   };
 
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      ../../nix-channel.nix
-    ];
-
   wsl.enable = true;
   wsl.startMenuLaunchers = true;
   wsl.defaultUser = "nixos";
   wsl.wslConf.user.default = "nixos";
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = ["nix-command" "flakes"];
 
-  hardware.opengl.enable = true;
+  hardware.graphics.enable = true;
 
   networking.hostName = "nixos";
 
@@ -50,7 +51,7 @@
   users.users.nixos = {
     isNormalUser = true;
     description = "WSL NixOS";
-    extraGroups = [ "wheel" "docker" ];
+    extraGroups = ["wheel" "docker"];
     packages = with pkgs; [
     #  thunderbird
        docker-credential-helpers

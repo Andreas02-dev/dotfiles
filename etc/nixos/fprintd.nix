@@ -1,5 +1,3 @@
-{ pkgs, ... }:
-
-{
+{pkgs, ...}: {
   services.fprintd.enable = false;
 }

@@ -1,7 +1,12 @@
-{ config, pkgs, upkgs, system, lib, inputs, ... }:
-
 {
-
+  config,
+  pkgs,
+  upkgs,
+  system,
+  lib,
+  inputs,
+  ...
+}: {
   imports = [
     ../shared/common
     ../shared/ssh_config
@@ -29,35 +34,37 @@
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
-  home.packages = with pkgs; [
+  home.packages = with pkgs;
+    [
       fastfetch
       ubuntu_font_family
-      fira-code-nerdfont
-      fira-mono
+      nerd-fonts.fira-code
+      nerd-fonts.fira-mono
       git
       screen
-    # # Adds the 'hello' command to your environment. It prints a friendly
-    # # "Hello, world!" when run.
-    # pkgs.hello
+      # # Adds the 'hello' command to your environment. It prints a friendly
+      # # "Hello, world!" when run.
+      # pkgs.hello
 
-    # # It is sometimes useful to fine-tune packages, for example, by applying
-    # # overrides. You can do that directly here, just don't forget the
-    # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
-    # # fonts?
-    # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
+      # # It is sometimes useful to fine-tune packages, for example, by applying
+      # # overrides. You can do that directly here, just don't forget the
+      # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
+      # # fonts?
+      # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
 
-    # # You can also create simple shell scripts directly inside your
-    # # configuration. For example, this adds a command 'my-hello' to your
-    # # environment:
-    (pkgs.writeShellScriptBin "hms" ''
-      nh home switch -a
-    '')
-    (pkgs.writeShellScriptBin "nos" ''
-      nh os switch -a
-    '')
-  ] ++ (with upkgs; [
-    ffmpeg
-  ]);
+      # # You can also create simple shell scripts directly inside your
+      # # configuration. For example, this adds a command 'my-hello' to your
+      # # environment:
+      (pkgs.writeShellScriptBin "hms" ''
+        nh home switch -a
+      '')
+      (pkgs.writeShellScriptBin "nos" ''
+        nh os switch -a
+      '')
+    ]
+    ++ (with upkgs; [
+      ffmpeg
+    ]);
 
   shared.ssh_config.enable = true;
 
@@ -88,7 +95,7 @@
   #  /etc/profiles/per-user/andreas/etc/profile.d/hm-session-vars.sh
   #
   home.sessionVariables = {
-    FLAKE = "/home/andreas/config";
+    NH_FLAKE = "/home/andreas/config";
     # EDITOR = "emacs";
   };
 
