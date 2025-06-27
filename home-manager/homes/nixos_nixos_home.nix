@@ -73,6 +73,9 @@
       echo -n "$keyringPass" | gnome-keyring-daemon -dr --unlock
       unset keyringPass
     '')
+    (pkgs.writeShellScriptBin "code" ''
+      exec "/mnt/c/Users/AndreasH/AppData/Local/Programs/Microsoft VS Code/bin" "$@"
+    '')
   ] ++ (with upkgs; [
     ffmpeg
   ]) ++ [
