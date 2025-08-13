@@ -6,7 +6,14 @@
   lib,
   inputs,
   ...
-}: {
+}:
+let
+  chromium86 = inputs.chromium-86.legacyPackages.x86_64-linux.chromium;
+  chromium86Wrapper = pkgs.writeShellScriptBin "chromium86" ''
+    exec ${chromium86}/bin/chromium "$@"
+  '';
+in
+ {
   imports = [
     ../shared/common
     ../shared/programs/direnv
@@ -74,12 +81,13 @@
       unset keyringPass
     '')
     (pkgs.writeShellScriptBin "code" ''
-      exec "/mnt/c/Users/AndreasH/AppData/Local/Programs/Microsoft VS Code/bin" "$@"
+      exec "/mnt/c/Users/AndreasH/AppData/Local/Programs/Microsoft VS Code/bin/code" "$@"
     '')
   ] ++ (with upkgs; [
     ffmpeg
   ]) ++ [
     inputs.chromium-109.legacyPackages.x86_64-linux.chromium
+    chromium86Wrapper
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
