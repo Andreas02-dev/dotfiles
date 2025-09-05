@@ -11,6 +11,7 @@
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ../../nix-channel.nix
+    ../../nixos-modules/reolink-ftp.nix
   ];
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
@@ -120,6 +121,7 @@
   };
   programs.fish.enable = true;
   programs.dconf.enable = true;
+  services.reolink-ftp.enable = true;
 
   systemd.services."nextcloud-backup-script" = {
     path = [
