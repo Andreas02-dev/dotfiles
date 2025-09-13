@@ -71,7 +71,7 @@ with lib; {
         # --- Configuration ---
         source_path="/home/ftp/reolink"
         base_backup_path="/var/lib/backups/reolink"
-        retention_days=14
+        retention_days=3
 
         # --- 1. Cleanup Phase ---
         echo "Starting cleanup phase..."
