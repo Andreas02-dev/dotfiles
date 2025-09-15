@@ -211,6 +211,16 @@
           ./home-manager/homes/nixos_nixos_home.nix
         ];
       };
+
+      # MacBook Pro 16 M3 Pro 36GB RAM (macOS)
+      "Andreas.Hoornstra@andreas-mbp.local" = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages.aarch64-darwin;
+        extraSpecialArgs = { inherit inputs outputs; };
+        modules = [
+          ./home-manager/home-modules/upkgs.nix
+          ./home-manager/homes/andreas_mbp_home.nix
+        ];
+      };
     };
 
     systemConfigs = {
