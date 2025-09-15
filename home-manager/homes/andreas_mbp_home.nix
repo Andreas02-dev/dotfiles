@@ -39,6 +39,8 @@
       SecurityKeyProvider ${pkgs.libfido2}/lib/libfido2.dylib
   '';
 
+  programs.firefox.enable = true;
+
   # Ensure HM can manage itself
   programs.home-manager.enable = true;
 }
