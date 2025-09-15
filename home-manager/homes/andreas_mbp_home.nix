@@ -34,10 +34,6 @@
    ];
 
   programs.ssh.enable = true;
-  programs.ssh.extraConfig = ''
-    Host *
-      SecurityKeyProvider ${pkgs.libfido2}/lib/libfido2.dylib
-  '';
 
   programs.firefox.enable = true;
 
